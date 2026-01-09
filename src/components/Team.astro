@@ -8,75 +8,614 @@ interface Props {
 const { lang } = Astro.props;
 const t = translations[lang];
 
-// Team members placeholder
-const teamMembers = [
-  {
-    name: 'Name Nachname',
-    role: t.team.chairman,
-    image: null,
+// Extended team data with categories
+const teamCategories = {
+  de: {
+    leadership: 'Vorstand',
+    religious: 'Religiöse Leitung',
+    education: 'Bildungsteam',
+    volunteers: 'Ehrenamtliche'
   },
-  {
-    name: 'Name Nachname',
-    role: t.team.viceChairman,
-    image: null,
+  sq: {
+    leadership: 'Kryesia',
+    religious: 'Udhëheqja Fetare',
+    education: 'Ekipi i Arsimit',
+    volunteers: 'Vullnetarë'
   },
-  {
-    name: 'Name Nachname',
-    role: t.team.treasurer,
-    image: null,
-  },
-  {
-    name: 'Name Nachname',
-    role: t.team.secretary,
-    image: null,
-  },
-];
+  ar: {
+    leadership: 'الإدارة',
+    religious: 'القيادة الدينية',
+    education: 'فريق التعليم',
+    volunteers: 'المتطوعون'
+  }
+};
+
+const teamData = {
+  leadership: [
+    {
+      name: 'Besnik Krasniqi',
+      role: { de: 'Vorsitzender', sq: 'Kryetar', ar: 'الرئيس' },
+      bio: {
+        de: 'Leitet den Verein seit 2018 mit Leidenschaft und Engagement für die albanisch-muslimische Gemeinschaft in München.',
+        sq: 'Udhëheq shoqatën që nga viti 2018 me pasion dhe përkushtim për komunitetin shqiptar-musliman në Mynih.',
+        ar: 'يقود الجمعية منذ 2018 بشغف والتزام تجاه المجتمع الألباني المسلم في ميونخ.'
+      },
+      since: 2018,
+      email: 'vorsitz@kosova-ev.de',
+      phone: '+49 89 12345678',
+      social: { linkedin: '#', twitter: '#' }
+    },
+    {
+      name: 'Arben Gashi',
+      role: { de: 'Stellv. Vorsitzender', sq: 'Zëvendës Kryetar', ar: 'نائب الرئيس' },
+      bio: {
+        de: 'Koordiniert Veranstaltungen und pflegt Partnerschaften mit anderen islamischen Organisationen.',
+        sq: 'Koordinon evenimentet dhe mban partneritete me organizata të tjera islame.',
+        ar: 'ينسق الفعاليات ويحافظ على الشراكات مع المنظمات الإسلامية الأخرى.'
+      },
+      since: 2019,
+      email: 'stellvertreter@kosova-ev.de',
+      social: { linkedin: '#' }
+    },
+    {
+      name: 'Driton Berisha',
+      role: { de: 'Schatzmeister', sq: 'Arkëtar', ar: 'أمين الصندوق' },
+      bio: {
+        de: 'Verantwortlich für Finanzen, Spendenverwaltung und Transparenz in allen finanziellen Angelegenheiten.',
+        sq: 'Përgjegjës për financa, menaxhimin e donacioneve dhe transparencën në të gjitha çështjet financiare.',
+        ar: 'مسؤول عن الشؤون المالية وإدارة التبرعات والشفافية في جميع الأمور المالية.'
+      },
+      since: 2017,
+      email: 'finanzen@kosova-ev.de',
+      social: { linkedin: '#' }
+    },
+    {
+      name: 'Fatmir Haliti',
+      role: { de: 'Schriftführer', sq: 'Sekretar', ar: 'السكرتير' },
+      bio: {
+        de: 'Dokumentiert alle wichtigen Beschlüsse und koordiniert die interne Kommunikation.',
+        sq: 'Dokumenton të gjitha vendimet e rëndësishme dhe koordinon komunikimin e brendshëm.',
+        ar: 'يوثق جميع القرارات المهمة وينسق الاتصال الداخلي.'
+      },
+      since: 2020,
+      email: 'sekretariat@kosova-ev.de',
+      social: { twitter: '#' }
+    }
+  ],
+  religious: [
+    {
+      name: 'Imam Hoxha Ismail Ahmeti',
+      role: { de: 'Hauptimam', sq: 'Imam Kryesor', ar: 'الإمام الرئيسي' },
+      bio: {
+        de: 'Studierte islamische Wissenschaften in Medina. Leitet Freitagsgebete, religiöse Beratung und Eheschließungen seit 2015.',
+        sq: 'Studioi shkencat islame në Medinë. Udhëheq namazet e xhumasë, këshillimin fetar dhe martesat që nga viti 2015.',
+        ar: 'درس العلوم الإسلامية في المدينة المنورة. يقود صلاة الجمعة والإرشاد الديني وعقود الزواج منذ 2015.'
+      },
+      since: 2015,
+      specialties: { de: ['Koranrezitation', 'Fiqh', 'Eheberatung'], sq: ['Recitimi i Kuranit', 'Fikh', 'Këshillim martesor'], ar: ['تلاوة القرآن', 'الفقه', 'الإرشاد الزوجي'] },
+      email: 'imam@kosova-ev.de',
+      social: { youtube: '#' }
+    },
+    {
+      name: 'Hafiz Burim Selimi',
+      role: { de: 'Hafiz & Koranlehrer', sq: 'Hafiz & Mësues Kurani', ar: 'الحافظ ومعلم القرآن' },
+      bio: {
+        de: 'Hafiz seit seinem 16. Lebensjahr. Spezialisiert auf Tajwid und Hifz-Unterricht für alle Altersgruppen.',
+        sq: 'Hafiz që nga mosha 16 vjeç. Specializuar në mësimin e Texhvidit dhe Hifzit për të gjitha moshat.',
+        ar: 'حافظ منذ سن 16. متخصص في تعليم التجويد والحفظ لجميع الأعمار.'
+      },
+      since: 2016,
+      specialties: { de: ['Tajwid', 'Hifz', 'Kinderunterricht'], sq: ['Texhvid', 'Hifz', 'Mësim për fëmijë'], ar: ['التجويد', 'الحفظ', 'تعليم الأطفال'] },
+      email: 'koran@kosova-ev.de',
+      social: { youtube: '#', instagram: '#' }
+    }
+  ],
+  education: [
+    {
+      name: 'Shpresa Mustafa',
+      role: { de: 'Leiterin Frauenkreis', sq: 'Drejtuese e Rrethit të Grave', ar: 'مديرة حلقة النساء' },
+      bio: {
+        de: 'Organisiert wöchentliche Frauenkreise, Bildungsprogramme und soziale Aktivitäten für Schwestern.',
+        sq: 'Organizon rrethe javore të grave, programe arsimore dhe aktivitete sociale për motrat.',
+        ar: 'تنظم حلقات نسائية أسبوعية وبرامج تعليمية وأنشطة اجتماعية للأخوات.'
+      },
+      since: 2017,
+      email: 'frauen@kosova-ev.de'
+    },
+    {
+      name: 'Ylber Ahmeti',
+      role: { de: 'Jugendkoordinator', sq: 'Koordinator i Rinisë', ar: 'منسق الشباب' },
+      bio: {
+        de: 'Entwickelt Programme für Jugendliche zwischen 14-25 Jahren. Organisiert Sport, Camps und Bildungsreisen.',
+        sq: 'Zhvillon programe për të rinjtë 14-25 vjeç. Organizon sport, kampe dhe udhëtime arsimore.',
+        ar: 'يطور برامج للشباب من 14-25 سنة. ينظم الرياضة والمخيمات والرحلات التعليمية.'
+      },
+      since: 2019,
+      email: 'jugend@kosova-ev.de',
+      social: { instagram: '#' }
+    },
+    {
+      name: 'Arta Rexhepi',
+      role: { de: 'Kinderprogramm', sq: 'Programi për Fëmijë', ar: 'برنامج الأطفال' },
+      bio: {
+        de: 'Pädagogin mit Herz. Betreut die Sonntagsschule und Kinderspielgruppen mit kreativen Lernmethoden.',
+        sq: 'Pedagoge me zemër. Kujdeset për shkollën e së dielës dhe grupet e lojërave me metoda kreative mësimi.',
+        ar: 'معلمة بقلب كبير. تشرف على مدرسة الأحد ومجموعات اللعب بأساليب تعليمية إبداعية.'
+      },
+      since: 2020,
+      email: 'kinder@kosova-ev.de'
+    }
+  ],
+  volunteers: [
+    {
+      name: 'Kujtim Morina',
+      role: { de: 'Gebäudemanagement', sq: 'Menaxhimi i Ndërtesës', ar: 'إدارة المبنى' },
+      bio: {
+        de: 'Sorgt dafür, dass unsere Moschee immer sauber, sicher und einladend ist.',
+        sq: 'Kujdeset që xhamia jonë të jetë gjithmonë e pastër, e sigurt dhe mikpritëse.',
+        ar: 'يضمن أن مسجدنا نظيف وآمن ومرحب دائماً.'
+      },
+      since: 2016
+    },
+    {
+      name: 'Liridona Bytyqi',
+      role: { de: 'Social Media', sq: 'Media Sociale', ar: 'وسائل التواصل' },
+      bio: {
+        de: 'Verwaltet unsere Online-Präsenz und hält die Community digital verbunden.',
+        sq: 'Menaxhon praninë tonë online dhe mban komunitetin të lidhur dixhitalisht.',
+        ar: 'تدير تواجدنا على الإنترنت وتحافظ على اتصال المجتمع رقمياً.'
+      },
+      since: 2021,
+      social: { instagram: '#', facebook: '#' }
+    },
+    {
+      name: 'Valon Hoxha',
+      role: { de: 'IT & Technik', sq: 'IT & Teknika', ar: 'تقنية المعلومات' },
+      bio: {
+        de: 'Kümmert sich um Livestreams, Audio-Systeme und unsere technische Infrastruktur.',
+        sq: 'Kujdeset për transmetimet live, sistemet audio dhe infrastrukturën tonë teknike.',
+        ar: 'يعتني بالبث المباشر وأنظمة الصوت والبنية التحتية التقنية.'
+      },
+      since: 2018,
+      social: { github: '#' }
+    }
+  ]
+};
+
+// Stats
+const stats = {
+  de: { members: '12+ Aktive', years: '10+ Jahre', volunteers: '30+ Helfer' },
+  sq: { members: '12+ Aktivë', years: '10+ Vite', volunteers: '30+ Ndihmës' },
+  ar: { members: '+12 نشط', years: '+10 سنوات', volunteers: '+30 متطوع' }
+};
 ---
 
-<section id="team" class="py-20 md:py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
-  <!-- Decorative -->
-  <div class="absolute top-0 right-0 w-96 h-96 bg-kosovo-gold/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+<section id="team" class="py-20 md:py-32 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden">
+  <!-- Decorative Elements -->
+  <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-kosovo-gold/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+  <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-kosovo-blue/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+
+  <!-- Islamic Pattern Overlay -->
+  <div class="absolute inset-0 opacity-[0.02]" style="background-image: url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23244AA5' stroke-width='0.5'/%3E%3C/svg%3E\");"></div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <!-- Section Header -->
-    <div class="text-center mb-16">
-      <span class="inline-block px-4 py-2 bg-kosovo-blue/10 text-kosovo-blue text-sm font-semibold rounded-full mb-4">
-        👥 {t.team.subtitle}
+    <div class="text-center mb-16 scroll-animate">
+      <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-kosovo-blue/10 to-kosovo-gold/10 text-kosovo-blue text-sm font-semibold rounded-full mb-6 border border-kosovo-blue/20">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+        </svg>
+        {t.team.subtitle}
       </span>
-      <h2 class="section-title">{t.team.title}</h2>
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{t.team.title}</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        {lang === 'de' ? 'Engagierte Menschen, die unsere Gemeinschaft mit Herz und Hingabe führen.' :
+         lang === 'sq' ? 'Njerëz të përkushtuar që udhëheqin komunitetin tonë me zemër dhe përkushtim.' :
+         'أشخاص متفانون يقودون مجتمعنا بقلب وإخلاص.'}
+      </p>
     </div>
 
-    <!-- Team Grid -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      {teamMembers.map((member, index) => (
-        <div class="group" style={`animation-delay: ${index * 0.1}s`}>
-          <div class="card text-center hover:bg-gradient-to-br hover:from-kosovo-blue hover:to-kosovo-blue-dark transition-all duration-300">
-            <!-- Avatar Placeholder -->
-            <div class="w-28 h-28 mx-auto mb-6 rounded-full overflow-hidden bg-gradient-to-br from-kosovo-blue/20 to-kosovo-gold/20 group-hover:from-white/20 group-hover:to-white/10 border-4 border-white shadow-xl">
-              <div class="w-full h-full flex items-center justify-center">
-                <svg class="w-14 h-14 text-kosovo-blue/40 group-hover:text-white/60" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                </svg>
+    <!-- Team Stats -->
+    <div class="flex flex-wrap justify-center gap-8 mb-16 scroll-animate">
+      <div class="flex items-center gap-3 px-6 py-3 bg-white rounded-2xl shadow-lg border border-gray-100">
+        <div class="w-12 h-12 bg-gradient-to-br from-kosovo-blue to-kosovo-blue-dark rounded-xl flex items-center justify-center">
+          <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-gray-900">{stats[lang].members}</div>
+          <div class="text-sm text-gray-500">{lang === 'de' ? 'Teammitglieder' : lang === 'sq' ? 'Anëtarë' : 'أعضاء'}</div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 px-6 py-3 bg-white rounded-2xl shadow-lg border border-gray-100">
+        <div class="w-12 h-12 bg-gradient-to-br from-kosovo-gold to-kosovo-gold-dark rounded-xl flex items-center justify-center">
+          <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-gray-900">{stats[lang].years}</div>
+          <div class="text-sm text-gray-500">{lang === 'de' ? 'Erfahrung' : lang === 'sq' ? 'Përvojë' : 'خبرة'}</div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 px-6 py-3 bg-white rounded-2xl shadow-lg border border-gray-100">
+        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+          <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-gray-900">{stats[lang].volunteers}</div>
+          <div class="text-sm text-gray-500">{lang === 'de' ? 'Ehrenamtliche' : lang === 'sq' ? 'Vullnetarë' : 'متطوعون'}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="flex flex-wrap justify-center gap-3 mb-12 scroll-animate">
+      <button class="team-tab-btn active px-6 py-3 rounded-xl font-medium transition-all duration-300" data-category="leadership">
+        {teamCategories[lang].leadership}
+      </button>
+      <button class="team-tab-btn px-6 py-3 rounded-xl font-medium transition-all duration-300" data-category="religious">
+        {teamCategories[lang].religious}
+      </button>
+      <button class="team-tab-btn px-6 py-3 rounded-xl font-medium transition-all duration-300" data-category="education">
+        {teamCategories[lang].education}
+      </button>
+      <button class="team-tab-btn px-6 py-3 rounded-xl font-medium transition-all duration-300" data-category="volunteers">
+        {teamCategories[lang].volunteers}
+      </button>
+    </div>
+
+    <!-- Leadership Team -->
+    <div class="team-category active" id="team-leadership">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {teamData.leadership.map((member, index) => (
+          <div class="team-card group scroll-animate" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="relative bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-kosovo-blue/30 overflow-hidden">
+              <!-- Background Gradient on Hover -->
+              <div class="absolute inset-0 bg-gradient-to-br from-kosovo-blue/5 to-kosovo-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+              <!-- Avatar -->
+              <div class="relative mb-6">
+                <div class="w-24 h-24 mx-auto rounded-2xl overflow-hidden bg-gradient-to-br from-kosovo-blue to-kosovo-blue-dark shadow-xl transform group-hover:scale-105 transition-transform duration-500">
+                  <div class="w-full h-full flex items-center justify-center">
+                    <span class="text-3xl font-bold text-white">{member.name.split(' ').map(n => n[0]).join('')}</span>
+                  </div>
+                </div>
+                <!-- Status Badge -->
+                <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-green-500 text-white text-xs font-medium rounded-full shadow-lg">
+                  {lang === 'de' ? `Seit ${member.since}` : lang === 'sq' ? `Që nga ${member.since}` : `منذ ${member.since}`}
+                </div>
+              </div>
+
+              <!-- Content -->
+              <div class="relative text-center">
+                <h3 class="text-xl font-bold text-gray-900 mb-1 group-hover:text-kosovo-blue transition-colors">
+                  {member.name}
+                </h3>
+                <span class="inline-block px-4 py-1.5 bg-kosovo-gold/10 text-kosovo-gold-dark text-sm font-medium rounded-full mb-4">
+                  {member.role[lang]}
+                </span>
+                <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                  {member.bio[lang]}
+                </p>
+
+                <!-- Contact & Social -->
+                <div class="flex items-center justify-center gap-3 pt-4 border-t border-gray-100">
+                  {member.email && (
+                    <a href={`mailto:${member.email}`} class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-kosovo-blue hover:text-white text-gray-600 transition-all duration-300" title="Email">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                      </svg>
+                    </a>
+                  )}
+                  {member.phone && (
+                    <a href={`tel:${member.phone}`} class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-green-500 hover:text-white text-gray-600 transition-all duration-300" title="Phone">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                      </svg>
+                    </a>
+                  )}
+                  {member.social?.linkedin && (
+                    <a href={member.social.linkedin} class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-[#0077B5] hover:text-white text-gray-600 transition-all duration-300" title="LinkedIn">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                      </svg>
+                    </a>
+                  )}
+                  {member.social?.twitter && (
+                    <a href={member.social.twitter} class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-[#1DA1F2] hover:text-white text-gray-600 transition-all duration-300" title="Twitter">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                      </svg>
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
+          </div>
+        ))}
+      </div>
+    </div>
 
-            <!-- Name -->
-            <h3 class="text-xl font-bold text-gray-800 group-hover:text-white mb-2 transition-colors">
-              {member.name}
-            </h3>
+    <!-- Religious Team -->
+    <div class="team-category hidden" id="team-religious">
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        {teamData.religious.map((member, index) => (
+          <div class="team-card group scroll-animate" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-kosovo-gold/30 overflow-hidden">
+              <!-- Special Islamic Pattern for Religious Leaders -->
+              <div class="absolute top-0 right-0 w-32 h-32 opacity-5">
+                <svg viewBox="0 0 100 100" fill="currentColor" class="text-kosovo-gold">
+                  <polygon points="50,0 61,35 98,35 68,57 79,91 50,70 21,91 32,57 2,35 39,35"/>
+                </svg>
+              </div>
 
-            <!-- Role -->
-            <span class="inline-block px-4 py-1.5 bg-kosovo-gold/10 group-hover:bg-white/20 text-kosovo-gold-dark group-hover:text-kosovo-gold text-sm font-medium rounded-full transition-colors">
-              {member.role}
-            </span>
+              <div class="flex flex-col md:flex-row items-center gap-6">
+                <!-- Avatar with Islamic Frame -->
+                <div class="relative flex-shrink-0">
+                  <div class="w-28 h-28 rounded-full overflow-hidden bg-gradient-to-br from-kosovo-gold to-kosovo-gold-dark shadow-xl border-4 border-white">
+                    <div class="w-full h-full flex items-center justify-center">
+                      <span class="text-3xl font-bold text-white">{member.name.split(' ').slice(-2).map(n => n[0]).join('')}</span>
+                    </div>
+                  </div>
+                  <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="flex-grow text-center md:text-left">
+                  <h3 class="text-xl font-bold text-gray-900 mb-1">
+                    {member.name}
+                  </h3>
+                  <span class="inline-block px-4 py-1.5 bg-gradient-to-r from-kosovo-gold/20 to-kosovo-gold/10 text-kosovo-gold-dark text-sm font-medium rounded-full mb-3">
+                    {member.role[lang]}
+                  </span>
+                  <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                    {member.bio[lang]}
+                  </p>
+
+                  <!-- Specialties Tags -->
+                  {member.specialties && (
+                    <div class="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
+                      {member.specialties[lang].map((specialty: string) => (
+                        <span class="px-3 py-1 bg-kosovo-blue/10 text-kosovo-blue text-xs font-medium rounded-full">
+                          {specialty}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <!-- Contact -->
+                  <div class="flex items-center justify-center md:justify-start gap-3 pt-4 border-t border-gray-100">
+                    {member.email && (
+                      <a href={`mailto:${member.email}`} class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-kosovo-blue hover:text-white text-gray-600 transition-all duration-300">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                      </a>
+                    )}
+                    {member.social?.youtube && (
+                      <a href={member.social.youtube} class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-red-500 hover:text-white text-gray-600 transition-all duration-300">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                      </a>
+                    )}
+                    {member.social?.instagram && (
+                      <a href={member.social.instagram} class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:text-white text-gray-600 transition-all duration-300">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Education Team -->
+    <div class="team-category hidden" id="team-education">
+      <div class="grid md:grid-cols-3 gap-8">
+        {teamData.education.map((member, index) => (
+          <div class="team-card group scroll-animate" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="relative bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-green-300 overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+              <div class="relative text-center">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden bg-gradient-to-br from-green-500 to-green-600 shadow-xl">
+                  <div class="w-full h-full flex items-center justify-center">
+                    <span class="text-2xl font-bold text-white">{member.name.split(' ').map(n => n[0]).join('')}</span>
+                  </div>
+                </div>
+
+                <div class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full inline-block mb-3">
+                  {lang === 'de' ? `Seit ${member.since}` : lang === 'sq' ? `Që nga ${member.since}` : `منذ ${member.since}`}
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-900 mb-1">{member.name}</h3>
+                <span class="text-green-600 text-sm font-medium">{member.role[lang]}</span>
+                <p class="text-gray-600 text-sm mt-3 leading-relaxed">{member.bio[lang]}</p>
+
+                {member.email && (
+                  <a href={`mailto:${member.email}`} class="inline-flex items-center gap-2 mt-4 text-sm text-green-600 hover:text-green-700">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    {lang === 'de' ? 'Kontaktieren' : lang === 'sq' ? 'Kontakto' : 'تواصل'}
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Volunteers Team -->
+    <div class="team-category hidden" id="team-volunteers">
+      <div class="grid md:grid-cols-3 gap-8">
+        {teamData.volunteers.map((member, index) => (
+          <div class="team-card group scroll-animate" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="relative bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-purple-300 overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+              <div class="relative text-center">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden bg-gradient-to-br from-purple-500 to-purple-600 shadow-xl">
+                  <div class="w-full h-full flex items-center justify-center">
+                    <span class="text-2xl font-bold text-white">{member.name.split(' ').map(n => n[0]).join('')}</span>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-center gap-2 mb-3">
+                  <svg class="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  <span class="text-purple-600 text-xs font-medium">
+                    {lang === 'de' ? 'Ehrenamtlich' : lang === 'sq' ? 'Vullnetar' : 'متطوع'}
+                  </span>
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-900 mb-1">{member.name}</h3>
+                <span class="text-purple-600 text-sm font-medium">{member.role[lang]}</span>
+                <p class="text-gray-600 text-sm mt-3 leading-relaxed">{member.bio[lang]}</p>
+
+                {member.social && (
+                  <div class="flex items-center justify-center gap-2 mt-4">
+                    {member.social.instagram && (
+                      <a href={member.social.instagram} class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:text-white text-gray-500 transition-all">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/>
+                        </svg>
+                      </a>
+                    )}
+                    {member.social.facebook && (
+                      <a href={member.social.facebook} class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-[#1877F2] hover:text-white text-gray-500 transition-all">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                      </a>
+                    )}
+                    {member.social.github && (
+                      <a href={member.social.github} class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-gray-900 hover:text-white text-gray-500 transition-all">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Join Our Team CTA -->
+    <div class="mt-20 scroll-animate">
+      <div class="relative bg-gradient-to-r from-kosovo-blue to-kosovo-blue-dark rounded-3xl p-8 md:p-12 text-center overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+          <div class="absolute inset-0" style="background-image: url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L40 20L20 40L0 20Z' fill='white' fill-opacity='0.1'/%3E%3C/svg%3E\");"></div>
+        </div>
+
+        <div class="relative">
+          <div class="w-16 h-16 mx-auto mb-6 bg-white/20 rounded-2xl flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+            {lang === 'de' ? 'Werde Teil unseres Teams!' : lang === 'sq' ? 'Bëhu pjesë e ekipit tonë!' : 'كن جزءاً من فريقنا!'}
+          </h3>
+          <p class="text-white/80 max-w-xl mx-auto mb-8">
+            {lang === 'de' ? 'Wir suchen immer engagierte Freiwillige, die unsere Gemeinschaft bereichern möchten. Jede Fähigkeit ist willkommen!' :
+             lang === 'sq' ? 'Jemi gjithmonë në kërkim të vullnetarëve të përkushtuar që duan të pasurojnë komunitetin tonë. Çdo aftësi është e mirëpritur!' :
+             'نحن نبحث دائماً عن متطوعين متفانين يرغبون في إثراء مجتمعنا. كل مهارة مرحب بها!'}
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <a href="#contact" class="px-8 py-4 bg-white text-kosovo-blue font-semibold rounded-xl hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              {lang === 'de' ? 'Kontakt aufnehmen' : lang === 'sq' ? 'Na kontakto' : 'تواصل معنا'}
+            </a>
+            <a href="mailto:ehrenamt@kosova-ev.de" class="px-8 py-4 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition-all border border-white/30">
+              {lang === 'de' ? 'ehrenamt@kosova-ev.de' : 'ehrenamt@kosova-ev.de'}
+            </a>
           </div>
         </div>
-      ))}
+      </div>
     </div>
 
     <!-- Note -->
-    <p class="text-center text-gray-500 text-sm mt-12 italic">
-      {lang === 'de' ? '* Namen und Fotos werden bald hinzugefügt' : lang === 'sq' ? '* Emrat dhe fotografitë do të shtohen së shpejti' : '* ستضاف الأسماء والصور قريباً'}
+    <p class="text-center text-gray-400 text-sm mt-8 italic">
+      {lang === 'de' ? '* Fotos werden bald hinzugefügt' : lang === 'sq' ? '* Fotografitë do të shtohen së shpejti' : '* ستضاف الصور قريباً'}
     </p>
   </div>
 </section>
+
+<style>
+  .team-tab-btn {
+    @apply bg-gray-100 text-gray-600;
+  }
+  .team-tab-btn:hover {
+    @apply bg-gray-200;
+  }
+  .team-tab-btn.active {
+    @apply bg-gradient-to-r from-kosovo-blue to-kosovo-blue-dark text-white shadow-lg;
+  }
+
+  .team-category {
+    @apply transition-all duration-500;
+  }
+  .team-category.hidden {
+    @apply hidden;
+  }
+</style>
+
+<script>
+  // Team category tabs
+  document.querySelectorAll('.team-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.getAttribute('data-category');
+
+      // Update active tab
+      document.querySelectorAll('.team-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Show/hide categories
+      document.querySelectorAll('.team-category').forEach(cat => {
+        cat.classList.add('hidden');
+      });
+
+      const targetCategory = document.getElementById(`team-${category}`);
+      if (targetCategory) {
+        targetCategory.classList.remove('hidden');
+
+        // Re-trigger scroll animations
+        targetCategory.querySelectorAll('.scroll-animate').forEach(el => {
+          el.classList.remove('visible');
+          setTimeout(() => {
+            el.classList.add('visible');
+          }, 50);
+        });
+      }
+    });
+  });
+
+  // Initial animation trigger
+  setTimeout(() => {
+    document.querySelectorAll('#team-leadership .scroll-animate').forEach(el => {
+      el.classList.add('visible');
+    });
+  }, 100);
+</script>

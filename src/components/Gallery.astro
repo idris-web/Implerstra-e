@@ -8,62 +8,374 @@ interface Props {
 const { lang } = Astro.props;
 const t = translations[lang];
 
-// Placeholder images with different aspect ratios
+const categories = [
+  { id: 'all', label: lang === 'de' ? 'Alle' : lang === 'sq' ? 'Të gjitha' : 'الكل', icon: '🖼️' },
+  { id: 'mosque', label: lang === 'de' ? 'Moschee' : lang === 'sq' ? 'Xhamia' : 'المسجد', icon: '🕌' },
+  { id: 'prayers', label: lang === 'de' ? 'Gebete' : lang === 'sq' ? 'Namazet' : 'الصلوات', icon: '🤲' },
+  { id: 'education', label: lang === 'de' ? 'Bildung' : lang === 'sq' ? 'Arsimi' : 'التعليم', icon: '📚' },
+  { id: 'events', label: lang === 'de' ? 'Events' : lang === 'sq' ? 'Ngjarjet' : 'الفعاليات', icon: '🎉' },
+  { id: 'community', label: lang === 'de' ? 'Gemeinschaft' : lang === 'sq' ? 'Bashkësia' : 'المجتمع', icon: '👥' },
+];
+
 const galleryItems = [
-  { id: 1, label: 'Moschee Außen', aspect: 'aspect-square', span: 'md:col-span-2 md:row-span-2' },
-  { id: 2, label: 'Gebetsraum', aspect: 'aspect-square', span: '' },
-  { id: 3, label: 'Koranunterricht', aspect: 'aspect-square', span: '' },
-  { id: 4, label: 'Gemeinde', aspect: 'aspect-video', span: 'md:col-span-2' },
-  { id: 5, label: 'Freitagsgebet', aspect: 'aspect-square', span: '' },
-  { id: 6, label: 'Veranstaltung', aspect: 'aspect-square', span: '' },
+  {
+    id: 1,
+    category: 'mosque',
+    title: lang === 'de' ? 'Moschee Außenansicht' : lang === 'sq' ? 'Pamja e jashtme e xhamisë' : 'المسجد من الخارج',
+    description: lang === 'de' ? 'Unser Gebäude in München' : lang === 'sq' ? 'Ndërtesa jonë në Mynih' : 'مبنانا في ميونخ',
+    span: 'md:col-span-2 md:row-span-2',
+    gradient: 'from-kosovo-blue to-kosovo-blue-dark',
+    featured: true,
+  },
+  {
+    id: 2,
+    category: 'mosque',
+    title: lang === 'de' ? 'Gebetsraum' : lang === 'sq' ? 'Dhoma e namazit' : 'قاعة الصلاة',
+    description: lang === 'de' ? 'Hauptgebetsraum für Männer' : lang === 'sq' ? 'Dhoma kryesore e namazit për burra' : 'قاعة الصلاة الرئيسية للرجال',
+    span: '',
+    gradient: 'from-emerald-500 to-emerald-600',
+    featured: false,
+  },
+  {
+    id: 3,
+    category: 'education',
+    title: lang === 'de' ? 'Koranunterricht' : lang === 'sq' ? 'Mësimi i Kuranit' : 'تعليم القرآن',
+    description: lang === 'de' ? 'Kinder beim Lernen' : lang === 'sq' ? 'Fëmijët duke mësuar' : 'الأطفال يتعلمون',
+    span: '',
+    gradient: 'from-amber-500 to-orange-500',
+    featured: false,
+  },
+  {
+    id: 4,
+    category: 'prayers',
+    title: lang === 'de' ? 'Freitagsgebet' : lang === 'sq' ? 'Namazi i xhumasë' : 'صلاة الجمعة',
+    description: lang === 'de' ? 'Gemeinsames Jummah-Gebet' : lang === 'sq' ? 'Namazi i përbashkët i xhumasë' : 'صلاة الجمعة الجماعية',
+    span: 'md:col-span-2',
+    gradient: 'from-purple-500 to-indigo-600',
+    featured: false,
+  },
+  {
+    id: 5,
+    category: 'events',
+    title: lang === 'de' ? 'Ramadan Iftar' : lang === 'sq' ? 'Iftari i Ramazanit' : 'إفطار رمضان',
+    description: lang === 'de' ? 'Gemeinsames Fastenbrechen' : lang === 'sq' ? 'Thyerja e agjërimit së bashku' : 'الإفطار الجماعي',
+    span: '',
+    gradient: 'from-rose-500 to-pink-600',
+    featured: false,
+  },
+  {
+    id: 6,
+    category: 'community',
+    title: lang === 'de' ? 'Familienfest' : lang === 'sq' ? 'Festa familjare' : 'حفل عائلي',
+    description: lang === 'de' ? 'Eid-Feier mit Familien' : lang === 'sq' ? 'Festimi i Bajramit me familje' : 'احتفال العيد مع العائلات',
+    span: '',
+    gradient: 'from-cyan-500 to-blue-500',
+    featured: false,
+  },
+  {
+    id: 7,
+    category: 'education',
+    title: lang === 'de' ? 'Arabisch-Kurs' : lang === 'sq' ? 'Kursi i arabishtes' : 'دورة اللغة العربية',
+    description: lang === 'de' ? 'Erwachsene lernen Arabisch' : lang === 'sq' ? 'Të rriturit mësojnë arabisht' : 'الكبار يتعلمون العربية',
+    span: '',
+    gradient: 'from-teal-500 to-emerald-500',
+    featured: false,
+  },
+  {
+    id: 8,
+    category: 'events',
+    title: lang === 'de' ? 'Koranwettbewerb' : lang === 'sq' ? 'Konkursi i Kuranit' : 'مسابقة القرآن',
+    description: lang === 'de' ? 'Jährliche Preisverleihung' : lang === 'sq' ? 'Dhënia e çmimeve vjetore' : 'توزيع الجوائز السنوي',
+    span: '',
+    gradient: 'from-yellow-500 to-amber-500',
+    featured: false,
+  },
+  {
+    id: 9,
+    category: 'prayers',
+    title: lang === 'de' ? 'Tarawih-Gebet' : lang === 'sq' ? 'Namazi i Teravive' : 'صلاة التراويح',
+    description: lang === 'de' ? 'Nachtgebete im Ramadan' : lang === 'sq' ? 'Namazet e natës në Ramazan' : 'صلاة الليل في رمضان',
+    span: 'md:col-span-2',
+    gradient: 'from-indigo-600 to-purple-700',
+    featured: false,
+  },
+  {
+    id: 10,
+    category: 'community',
+    title: lang === 'de' ? 'Jugendgruppe' : lang === 'sq' ? 'Grupi i të rinjve' : 'مجموعة الشباب',
+    description: lang === 'de' ? 'Aktivitäten für Jugendliche' : lang === 'sq' ? 'Aktivitete për të rinjtë' : 'أنشطة للشباب',
+    span: '',
+    gradient: 'from-orange-500 to-red-500',
+    featured: false,
+  },
+  {
+    id: 11,
+    category: 'mosque',
+    title: lang === 'de' ? 'Frauenbereich' : lang === 'sq' ? 'Zona e grave' : 'قسم النساء',
+    description: lang === 'de' ? 'Separater Gebetsbereich' : lang === 'sq' ? 'Zonë e veçantë e namazit' : 'منطقة صلاة منفصلة',
+    span: '',
+    gradient: 'from-pink-500 to-rose-500',
+    featured: false,
+  },
+  {
+    id: 12,
+    category: 'events',
+    title: lang === 'de' ? 'Tag der offenen Moschee' : lang === 'sq' ? 'Dita e xhamisë së hapur' : 'يوم المسجد المفتوح',
+    description: lang === 'de' ? 'Besucher und Nachbarn' : lang === 'sq' ? 'Vizitorë dhe fqinjë' : 'الزوار والجيران',
+    span: '',
+    gradient: 'from-green-500 to-teal-500',
+    featured: false,
+  },
+];
+
+const stats = [
+  { value: '500+', label: lang === 'de' ? 'Fotos' : lang === 'sq' ? 'Foto' : 'صور' },
+  { value: '50+', label: lang === 'de' ? 'Events dokumentiert' : lang === 'sq' ? 'Ngjarje të dokumentuara' : 'فعاليات موثقة' },
+  { value: '10', label: lang === 'de' ? 'Jahre Geschichte' : lang === 'sq' ? 'Vite histori' : 'سنوات تاريخ' },
 ];
 ---
 
-<section id="gallery" class="py-20 md:py-32 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section id="gallery" class="section-padding bg-gradient-to-b from-gray-50 via-white to-gray-50 relative overflow-hidden">
+  <!-- Decorative elements -->
+  <div class="absolute top-0 right-0 w-96 h-96 bg-kosovo-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-96 h-96 bg-kosovo-blue/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <!-- Section Header -->
-    <div class="text-center mb-16">
-      <span class="inline-block px-4 py-2 bg-kosovo-gold/10 text-kosovo-gold-dark text-sm font-semibold rounded-full mb-4">
-        📷 {t.gallery.subtitle}
+    <div class="text-center mb-12">
+      <span class="badge-gold mb-4">
+        <span>📷</span>
+        <span>{t.gallery.subtitle}</span>
       </span>
       <h2 class="section-title">{t.gallery.title}</h2>
+      <p class="section-subtitle">
+        {lang === 'de' ? 'Eindrücke aus unserem Gemeindeleben' : lang === 'sq' ? 'Përshtypje nga jeta e bashkësisë sonë' : 'انطباعات من حياة مجتمعنا'}
+      </p>
+    </div>
+
+    <!-- Stats -->
+    <div class="flex flex-wrap justify-center gap-8 md:gap-16 mb-12">
+      {stats.map((stat) => (
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-black text-kosovo-blue">{stat.value}</div>
+          <div class="text-gray-500 text-sm">{stat.label}</div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Category Filter -->
+    <div class="flex flex-wrap justify-center gap-2 mb-12">
+      {categories.map((cat) => (
+        <button
+          class="gallery-filter-btn group flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border-2 data-[active=true]:bg-kosovo-blue data-[active=true]:text-white data-[active=true]:border-kosovo-blue border-gray-200 text-gray-600 hover:border-kosovo-blue hover:text-kosovo-blue"
+          data-category={cat.id}
+          data-active={cat.id === 'all' ? 'true' : 'false'}
+        >
+          <span class="group-data-[active=true]:scale-110 transition-transform">{cat.icon}</span>
+          <span>{cat.label}</span>
+        </button>
+      ))}
     </div>
 
     <!-- Gallery Grid -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      {galleryItems.map((item) => (
-        <div class={`${item.span} group cursor-pointer`}>
-          <div class={`${item.aspect} bg-gradient-to-br from-kosovo-blue to-kosovo-blue-dark rounded-2xl overflow-hidden relative shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:scale-[1.02]`}>
-            <!-- Placeholder pattern -->
-            <div class="absolute inset-0 islamic-pattern opacity-20"></div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4" id="gallery-grid">
+      {galleryItems.map((item, index) => (
+        <div
+          class={`gallery-item group cursor-pointer ${item.span}`}
+          data-category={item.category}
+          data-index={index}
+        >
+          <div class={`relative h-full min-h-[200px] ${item.span.includes('row-span-2') ? 'md:min-h-[416px]' : ''} bg-gradient-to-br ${item.gradient} rounded-2xl md:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02]`}>
+            <!-- Islamic pattern background -->
+            <div class="absolute inset-0 islamic-pattern opacity-10"></div>
+
+            <!-- Featured badge -->
+            {item.featured && (
+              <div class="absolute top-3 left-3 z-20">
+                <span class="px-3 py-1 bg-kosovo-gold text-white text-xs font-bold rounded-full shadow-lg">
+                  {lang === 'de' ? 'Highlight' : lang === 'sq' ? 'Kryesor' : 'مميز'}
+                </span>
+              </div>
+            )}
 
             <!-- Placeholder content -->
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="text-center text-white p-4">
-                <svg class="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-                <span class="text-sm opacity-70">{item.label}</span>
+            <div class="absolute inset-0 flex items-center justify-center p-4">
+              <div class="text-center text-white">
+                <div class="w-16 h-16 md:w-20 md:h-20 mx-auto mb-3 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                  <svg class="w-8 h-8 md:w-10 md:h-10 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <h4 class="font-bold text-sm md:text-base mb-1">{item.title}</h4>
+                <p class="text-xs md:text-sm opacity-70 hidden md:block">{item.description}</p>
               </div>
             </div>
 
             <!-- Hover overlay -->
-            <div class="absolute inset-0 bg-kosovo-gold/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <div class="text-white text-center">
-                <svg class="w-10 h-10 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
-                </svg>
-                <span class="text-sm font-medium">{item.label}</span>
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+              <div class="text-white text-center transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                <div class="w-14 h-14 mx-auto mb-3 bg-kosovo-gold rounded-full flex items-center justify-center shadow-lg">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                  </svg>
+                </div>
+                <p class="font-bold">{item.title}</p>
+                <p class="text-sm opacity-70 mt-1">
+                  {lang === 'de' ? 'Klicken zum Vergrößern' : lang === 'sq' ? 'Kliko për të zmadhuar' : 'انقر للتكبير'}
+                </p>
               </div>
             </div>
+
+            <!-- Corner decoration -->
+            <div class="absolute bottom-0 right-0 w-20 h-20 bg-white/5 rounded-tl-full"></div>
           </div>
         </div>
       ))}
     </div>
 
-    <!-- Note for admin -->
-    <p class="text-center text-gray-500 text-sm mt-8 italic">
-      {lang === 'de' ? '* Bilder werden bald hinzugefügt' : lang === 'sq' ? '* Fotografitë do të shtohen së shpejti' : '* ستضاف الصور قريباً'}
+    <!-- Load More / View All -->
+    <div class="text-center mt-12">
+      <button class="group inline-flex items-center gap-3 px-8 py-4 bg-white border-2 border-kosovo-blue text-kosovo-blue font-semibold rounded-full hover:bg-kosovo-blue hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl">
+        <span>{lang === 'de' ? 'Mehr Bilder laden' : lang === 'sq' ? 'Ngarko më shumë foto' : 'تحميل المزيد من الصور'}</span>
+        <svg class="w-5 h-5 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Note -->
+    <p class="text-center text-gray-400 text-sm mt-8">
+      {lang === 'de' ? '* Echte Fotos werden bald hinzugefügt. Placeholder zeigen geplante Inhalte.' : lang === 'sq' ? '* Fotografitë e vërteta do të shtohen së shpejti. Placeholder tregojnë përmbajtjen e planifikuar.' : '* ستضاف الصور الحقيقية قريباً. العناصر النائبة تظهر المحتوى المخطط.'}
     </p>
   </div>
+
+  <!-- Lightbox Modal (hidden by default) -->
+  <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-md">
+    <button id="lightbox-close" class="absolute top-4 right-4 z-50 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+
+    <div id="lightbox-content" class="absolute inset-0 flex items-center justify-center p-8">
+      <!-- Content will be injected here -->
+    </div>
+
+    <div id="lightbox-info" class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent text-white text-center">
+      <h4 id="lightbox-title" class="text-xl font-bold mb-1"></h4>
+      <p id="lightbox-desc" class="text-white/70"></p>
+      <p id="lightbox-counter" class="text-sm text-white/50 mt-2"></p>
+    </div>
+  </div>
 </section>
+
+<script>
+  // Category Filter
+  document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.getAttribute('data-category');
+
+      // Update active states
+      document.querySelectorAll('.gallery-filter-btn').forEach(b => {
+        b.setAttribute('data-active', 'false');
+      });
+      btn.setAttribute('data-active', 'true');
+
+      // Filter gallery items
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        if (category === 'all' || itemCategory === category) {
+          (item as HTMLElement).style.display = 'block';
+          item.classList.add('animate-fade-in');
+        } else {
+          (item as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Lightbox functionality
+  const lightbox = document.getElementById('lightbox');
+  const lightboxContent = document.getElementById('lightbox-content');
+  const lightboxTitle = document.getElementById('lightbox-title');
+  const lightboxDesc = document.getElementById('lightbox-desc');
+  const lightboxCounter = document.getElementById('lightbox-counter');
+  let currentIndex = 0;
+  const items = Array.from(document.querySelectorAll('.gallery-item'));
+
+  function openLightbox(index: number) {
+    currentIndex = index;
+    updateLightbox();
+    lightbox?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox?.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  function updateLightbox() {
+    const item = items[currentIndex];
+    const title = item?.querySelector('h4')?.textContent || '';
+    const desc = item?.querySelector('p')?.textContent || '';
+
+    if (lightboxTitle) lightboxTitle.textContent = title;
+    if (lightboxDesc) lightboxDesc.textContent = desc;
+    if (lightboxCounter) lightboxCounter.textContent = `${currentIndex + 1} / ${items.length}`;
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % items.length;
+    updateLightbox();
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    updateLightbox();
+  }
+
+  // Event listeners
+  document.querySelectorAll('.gallery-item').forEach((item, index) => {
+    item.addEventListener('click', () => openLightbox(index));
+  });
+
+  document.getElementById('lightbox-close')?.addEventListener('click', closeLightbox);
+  document.getElementById('lightbox-next')?.addEventListener('click', nextImage);
+  document.getElementById('lightbox-prev')?.addEventListener('click', prevImage);
+
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox?.classList.contains('hidden')) {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+    }
+  });
+</script>
+
+<style>
+  @keyframes fade-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out forwards;
+  }
+</style>

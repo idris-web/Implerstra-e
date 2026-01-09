@@ -8,13 +8,111 @@ interface Props {
 const { lang } = Astro.props;
 const t = translations[lang];
 
-// Placeholder bank details - to be filled in
+// Bank details
 const bankDetails = {
   accountHolder: 'Kosova e.V.',
   iban: 'DE00 0000 0000 0000 0000 00',
   bic: 'XXXXXXXX',
-  bank: 'Musterbank München',
+  bank: 'Sparkasse München',
 };
+
+// Donation campaigns with progress
+const campaigns = [
+  {
+    id: 'moschee-renovierung',
+    title: { de: 'Moschee-Renovierung', sq: 'Rinovimi i Xhamisë', ar: 'تجديد المسجد' },
+    description: {
+      de: 'Neue Beleuchtung, Teppiche und Klimaanlage für mehr Komfort beim Gebet.',
+      sq: 'Ndriçim i ri, qilima dhe klimatizim për më shumë komoditet gjatë namazit.',
+      ar: 'إضاءة جديدة وسجاد وتكييف هواء لمزيد من الراحة أثناء الصلاة.'
+    },
+    goal: 25000,
+    raised: 18750,
+    deadline: '2025-06-30',
+    priority: true,
+    icon: 'building'
+  },
+  {
+    id: 'koranschule',
+    title: { de: 'Koranschule 2025', sq: 'Shkolla e Kuranit 2025', ar: 'مدرسة القرآن 2025' },
+    description: {
+      de: 'Lernmaterialien, Bücher und Ausstattung für unsere wachsende Koranschule.',
+      sq: 'Materiale mësimore, libra dhe pajisje për shkollën tonë të Kuranit në rritje.',
+      ar: 'مواد تعليمية وكتب ومعدات لمدرسة القرآن المتنامية.'
+    },
+    goal: 8000,
+    raised: 5200,
+    deadline: '2025-09-01',
+    priority: false,
+    icon: 'book'
+  },
+  {
+    id: 'jugendprogramm',
+    title: { de: 'Jugendprogramm', sq: 'Programi i Rinisë', ar: 'برنامج الشباب' },
+    description: {
+      de: 'Sportaktivitäten, Camps und Bildungsreisen für unsere Jugend.',
+      sq: 'Aktivitete sportive, kampe dhe udhëtime arsimore për të rinjtë tanë.',
+      ar: 'أنشطة رياضية ومخيمات ورحلات تعليمية لشبابنا.'
+    },
+    goal: 12000,
+    raised: 3600,
+    deadline: '2025-12-31',
+    priority: false,
+    icon: 'users'
+  },
+  {
+    id: 'ramadan-iftar',
+    title: { de: 'Ramadan Iftar 2025', sq: 'Iftari i Ramazanit 2025', ar: 'إفطار رمضان 2025' },
+    description: {
+      de: 'Finanzierung der täglichen Iftar-Mahlzeiten für die Gemeinschaft im Ramadan.',
+      sq: 'Financimi i vakteve të iftarit ditor për komunitetin gjatë Ramazanit.',
+      ar: 'تمويل وجبات الإفطار اليومية للمجتمع في رمضان.'
+    },
+    goal: 15000,
+    raised: 2250,
+    deadline: '2025-03-01',
+    priority: true,
+    icon: 'moon'
+  }
+];
+
+// Suggested donation amounts
+const donationAmounts = [10, 25, 50, 100, 250, 500];
+
+// Zakat info
+const zakatInfo = {
+  nisab: {
+    gold: { de: '87,48g Gold', sq: '87,48g Ari', ar: '87.48 غرام ذهب' },
+    silver: { de: '612,36g Silber', sq: '612,36g Argjend', ar: '612.36 غرام فضة' },
+    value: '~5.500€'
+  },
+  rate: '2,5%'
+};
+
+// Impact stats
+const impactStats = {
+  de: [
+    { value: '47.250€', label: 'gesammelt 2024' },
+    { value: '850+', label: 'Spender' },
+    { value: '12', label: 'Projekte finanziert' },
+    { value: '100%', label: 'geht an die Gemeinschaft' }
+  ],
+  sq: [
+    { value: '47.250€', label: 'mbledhur 2024' },
+    { value: '850+', label: 'Donatorë' },
+    { value: '12', label: 'Projekte financuar' },
+    { value: '100%', label: 'shkon për komunitetin' }
+  ],
+  ar: [
+    { value: '47.250€', label: 'تم جمعها 2024' },
+    { value: '+850', label: 'متبرع' },
+    { value: '12', label: 'مشروع ممول' },
+    { value: '100%', label: 'يذهب للمجتمع' }
+  ]
+};
+
+// Calculate percentage
+const calculateProgress = (raised: number, goal: number) => Math.min(Math.round((raised / goal) * 100), 100);
 ---
 
 <section id="donate" class="py-20 md:py-32 relative overflow-hidden">
@@ -22,79 +120,537 @@ const bankDetails = {
   <div class="absolute inset-0 gradient-bg"></div>
   <div class="absolute inset-0 islamic-pattern opacity-10"></div>
 
-  <!-- Decorative -->
-  <div class="absolute top-20 right-20 w-64 h-64 bg-kosovo-gold/20 rounded-full blur-3xl"></div>
-  <div class="absolute bottom-20 left-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+  <!-- Decorative Elements -->
+  <div class="absolute top-20 right-10 w-96 h-96 bg-kosovo-gold/20 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-20 left-10 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl"></div>
+  <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-green-500/10 rounded-full blur-3xl"></div>
 
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <!-- Section Header -->
-    <div class="text-center mb-12">
-      <span class="inline-block px-4 py-2 bg-white/10 text-kosovo-gold text-sm font-semibold rounded-full mb-4">
-        ❤️ {t.donate.subtitle}
+    <div class="text-center mb-16 scroll-animate">
+      <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 text-kosovo-gold text-sm font-semibold rounded-full mb-6 border border-white/20">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+        {t.donate.subtitle}
       </span>
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{t.donate.title}</h2>
-      <p class="text-lg text-white/80 max-w-2xl mx-auto">
+      <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">{t.donate.title}</h2>
+      <p class="text-xl text-white/80 max-w-2xl mx-auto">
         {t.donate.description}
       </p>
     </div>
 
-    <!-- Bank Details Card -->
-    <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
-      <div class="flex items-center gap-4 mb-8">
-        <div class="w-14 h-14 bg-kosovo-gold/10 rounded-2xl flex items-center justify-center">
-          <svg class="w-8 h-8 text-kosovo-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-          </svg>
+    <!-- Impact Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16 scroll-animate">
+      {impactStats[lang].map((stat, index) => (
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center border border-white/10 hover:border-kosovo-gold/50 transition-all duration-300">
+          <div class="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</div>
+          <div class="text-white/60 text-sm">{stat.label}</div>
         </div>
-        <h3 class="text-2xl font-bold text-gray-800">{t.donate.bankDetails}</h3>
-      </div>
+      ))}
+    </div>
 
-      <div class="grid md:grid-cols-2 gap-6">
-        <!-- Account Holder -->
-        <div class="p-4 bg-gray-50 rounded-xl">
-          <span class="text-sm text-gray-500 block mb-1">{t.donate.accountHolder}</span>
-          <span class="text-lg font-semibold text-gray-800">{bankDetails.accountHolder}</span>
-        </div>
+    <!-- Donation Tabs -->
+    <div class="flex flex-wrap justify-center gap-3 mb-12 scroll-animate">
+      <button class="donate-tab-btn active px-6 py-3 rounded-xl font-medium transition-all duration-300" data-tab="projects">
+        {lang === 'de' ? 'Projekte' : lang === 'sq' ? 'Projektet' : 'المشاريع'}
+      </button>
+      <button class="donate-tab-btn px-6 py-3 rounded-xl font-medium transition-all duration-300" data-tab="general">
+        {lang === 'de' ? 'Allgemeine Spende' : lang === 'sq' ? 'Donacion i Përgjithshëm' : 'تبرع عام'}
+      </button>
+      <button class="donate-tab-btn px-6 py-3 rounded-xl font-medium transition-all duration-300" data-tab="zakat">
+        {lang === 'de' ? 'Zakat & Sadaqa' : lang === 'sq' ? 'Zekat & Sadaka' : 'الزكاة والصدقة'}
+      </button>
+    </div>
 
-        <!-- Bank -->
-        <div class="p-4 bg-gray-50 rounded-xl">
-          <span class="text-sm text-gray-500 block mb-1">{t.donate.bank}</span>
-          <span class="text-lg font-semibold text-gray-800">{bankDetails.bank}</span>
-        </div>
+    <!-- Projects Tab -->
+    <div class="donate-tab-content active" id="tab-projects">
+      <div class="grid md:grid-cols-2 gap-6 mb-12">
+        {campaigns.map((campaign, index) => (
+          <div class={`scroll-animate ${campaign.priority ? 'md:col-span-2' : ''}`} style={`animation-delay: ${index * 0.1}s`}>
+            <div class={`bg-white rounded-3xl p-6 md:p-8 shadow-xl hover:shadow-2xl transition-all duration-500 ${campaign.priority ? 'border-2 border-kosovo-gold' : 'border border-gray-100'}`}>
+              {/* Priority Badge */}
+              {campaign.priority && (
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-kosovo-gold to-kosovo-gold-dark text-white text-sm font-semibold rounded-full mb-4">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                  </svg>
+                  {lang === 'de' ? 'Priorität' : lang === 'sq' ? 'Prioritet' : 'أولوية'}
+                </div>
+              )}
 
-        <!-- IBAN -->
-        <div class="p-4 bg-gray-50 rounded-xl md:col-span-2">
-          <span class="text-sm text-gray-500 block mb-1">{t.donate.iban}</span>
-          <span class="text-xl font-mono font-bold text-kosovo-blue tracking-wider">{bankDetails.iban}</span>
-        </div>
+              <div class={`flex ${campaign.priority ? 'flex-col md:flex-row' : 'flex-col'} gap-6`}>
+                {/* Icon */}
+                <div class={`${campaign.priority ? 'md:w-1/3' : 'w-full'}`}>
+                  <div class={`${campaign.priority ? 'w-24 h-24 md:w-32 md:h-32' : 'w-16 h-16'} mx-auto md:mx-0 bg-gradient-to-br from-kosovo-blue/10 to-kosovo-gold/10 rounded-2xl flex items-center justify-center mb-4 md:mb-0`}>
+                    {campaign.icon === 'building' && (
+                      <svg class={`${campaign.priority ? 'w-12 h-12 md:w-16 md:h-16' : 'w-8 h-8'} text-kosovo-blue`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                      </svg>
+                    )}
+                    {campaign.icon === 'book' && (
+                      <svg class={`${campaign.priority ? 'w-12 h-12 md:w-16 md:h-16' : 'w-8 h-8'} text-kosovo-blue`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                      </svg>
+                    )}
+                    {campaign.icon === 'users' && (
+                      <svg class={`${campaign.priority ? 'w-12 h-12 md:w-16 md:h-16' : 'w-8 h-8'} text-kosovo-blue`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                      </svg>
+                    )}
+                    {campaign.icon === 'moon' && (
+                      <svg class={`${campaign.priority ? 'w-12 h-12 md:w-16 md:h-16' : 'w-8 h-8'} text-kosovo-blue`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                      </svg>
+                    )}
+                  </div>
+                </div>
 
-        <!-- BIC -->
-        <div class="p-4 bg-gray-50 rounded-xl">
-          <span class="text-sm text-gray-500 block mb-1">{t.donate.bic}</span>
-          <span class="text-lg font-mono font-semibold text-gray-800">{bankDetails.bic}</span>
-        </div>
+                {/* Content */}
+                <div class={`${campaign.priority ? 'md:w-2/3' : 'w-full'}`}>
+                  <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">{campaign.title[lang]}</h3>
+                  <p class="text-gray-600 mb-4">{campaign.description[lang]}</p>
 
-        <!-- Reference -->
-        <div class="p-4 bg-kosovo-gold/10 rounded-xl border-2 border-kosovo-gold/20">
-          <span class="text-sm text-gray-500 block mb-1">{t.donate.reference}</span>
-          <span class="text-lg font-semibold text-kosovo-gold-dark">{t.donate.referenceText}</span>
-        </div>
-      </div>
+                  {/* Progress Bar */}
+                  <div class="mb-4">
+                    <div class="flex justify-between text-sm mb-2">
+                      <span class="font-semibold text-kosovo-blue">
+                        {campaign.raised.toLocaleString('de-DE')}€
+                        <span class="text-gray-500 font-normal">
+                          {lang === 'de' ? ' gesammelt' : lang === 'sq' ? ' mbledhur' : ' تم جمعها'}
+                        </span>
+                      </span>
+                      <span class="text-gray-500">
+                        {lang === 'de' ? 'Ziel: ' : lang === 'sq' ? 'Objektivi: ' : 'الهدف: '}
+                        {campaign.goal.toLocaleString('de-DE')}€
+                      </span>
+                    </div>
+                    <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        class="h-full bg-gradient-to-r from-kosovo-blue to-kosovo-gold rounded-full transition-all duration-1000 progress-bar"
+                        style={`width: ${calculateProgress(campaign.raised, campaign.goal)}%`}
+                        data-progress={calculateProgress(campaign.raised, campaign.goal)}
+                      ></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-2">
+                      <span>{calculateProgress(campaign.raised, campaign.goal)}% {lang === 'de' ? 'erreicht' : lang === 'sq' ? 'arritur' : 'تحقق'}</span>
+                      <span>
+                        {lang === 'de' ? 'Bis: ' : lang === 'sq' ? 'Deri: ' : 'حتى: '}
+                        {new Date(campaign.deadline).toLocaleDateString(lang === 'de' ? 'de-DE' : lang === 'sq' ? 'sq-AL' : 'ar-SA')}
+                      </span>
+                    </div>
+                  </div>
 
-      <!-- Tax Note -->
-      <div class="mt-8 p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3">
-        <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <span class="text-green-800">{t.donate.taxDeductible}</span>
+                  {/* Donate Button */}
+                  <button class="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-kosovo-blue to-kosovo-blue-dark text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 donate-project-btn" data-project={campaign.id}>
+                    {lang === 'de' ? 'Für dieses Projekt spenden' : lang === 'sq' ? 'Dhuron për këtë projekt' : 'تبرع لهذا المشروع'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
 
-    <!-- Additional donation options -->
-    <div class="text-center mt-12">
-      <p class="text-white/60 text-sm">
-        {lang === 'de' ? 'Oder spenden Sie direkt in der Moschee' : lang === 'sq' ? 'Ose dhuroni drejtpërdrejt në xhami' : 'أو تبرع مباشرة في المسجد'}
-      </p>
+    <!-- General Donation Tab -->
+    <div class="donate-tab-content hidden" id="tab-general">
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Quick Donate -->
+        <div class="bg-white rounded-3xl p-8 shadow-xl scroll-animate">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6">
+            {lang === 'de' ? 'Schnellspende' : lang === 'sq' ? 'Donacion i Shpejtë' : 'تبرع سريع'}
+          </h3>
+
+          <!-- Suggested Amounts -->
+          <div class="grid grid-cols-3 gap-3 mb-6">
+            {donationAmounts.map((amount) => (
+              <button class="donation-amount-btn p-4 rounded-xl border-2 border-gray-200 hover:border-kosovo-blue text-center transition-all duration-300" data-amount={amount}>
+                <span class="text-2xl font-bold text-gray-800">{amount}€</span>
+              </button>
+            ))}
+          </div>
+
+          <!-- Custom Amount -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              {lang === 'de' ? 'Anderer Betrag' : lang === 'sq' ? 'Shumë tjetër' : 'مبلغ آخر'}
+            </label>
+            <div class="relative">
+              <input
+                type="number"
+                id="custom-amount"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-kosovo-blue focus:outline-none transition-colors"
+                placeholder="0"
+                min="1"
+              />
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">€</span>
+            </div>
+          </div>
+
+          <!-- Recurring Option -->
+          <div class="mb-6 p-4 bg-gray-50 rounded-xl">
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" id="recurring" class="w-5 h-5 text-kosovo-blue rounded border-gray-300 focus:ring-kosovo-blue" />
+              <div>
+                <span class="font-medium text-gray-800">
+                  {lang === 'de' ? 'Monatliche Spende' : lang === 'sq' ? 'Donacion mujor' : 'تبرع شهري'}
+                </span>
+                <p class="text-sm text-gray-500">
+                  {lang === 'de' ? 'Unterstützen Sie uns regelmäßig' : lang === 'sq' ? 'Na mbështesni rregullisht' : 'ادعمنا بانتظام'}
+                </p>
+              </div>
+            </label>
+          </div>
+
+          <!-- Donation Purpose -->
+          <div class="mb-8">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              {lang === 'de' ? 'Verwendungszweck' : lang === 'sq' ? 'Qëllimi' : 'الغرض'}
+            </label>
+            <select class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-kosovo-blue focus:outline-none transition-colors">
+              <option value="general">{lang === 'de' ? 'Allgemeine Spende' : lang === 'sq' ? 'Donacion i përgjithshëm' : 'تبرع عام'}</option>
+              <option value="mosque">{lang === 'de' ? 'Moschee-Unterhalt' : lang === 'sq' ? 'Mirëmbajtja e xhamisë' : 'صيانة المسجد'}</option>
+              <option value="education">{lang === 'de' ? 'Bildung & Koranschule' : lang === 'sq' ? 'Arsimi & Shkolla e Kuranit' : 'التعليم ومدرسة القرآن'}</option>
+              <option value="poor">{lang === 'de' ? 'Bedürftige' : lang === 'sq' ? 'Të varfrit' : 'المحتاجين'}</option>
+            </select>
+          </div>
+
+          <!-- Impact Preview -->
+          <div class="p-4 bg-green-50 border border-green-200 rounded-xl mb-6">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+              </div>
+              <div>
+                <span class="font-medium text-green-800" id="impact-text">
+                  {lang === 'de' ? 'Mit 50€ können wir...' : lang === 'sq' ? 'Me 50€ mund të...' : 'بـ 50€ يمكننا...'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bank Details -->
+        <div class="bg-white rounded-3xl p-8 shadow-xl scroll-animate">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-14 h-14 bg-kosovo-gold/10 rounded-2xl flex items-center justify-center">
+              <svg class="w-8 h-8 text-kosovo-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800">{t.donate.bankDetails}</h3>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Account Holder -->
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <span class="text-sm text-gray-500 block mb-1">{t.donate.accountHolder}</span>
+              <span class="text-lg font-semibold text-gray-800">{bankDetails.accountHolder}</span>
+            </div>
+
+            <!-- Bank -->
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <span class="text-sm text-gray-500 block mb-1">{t.donate.bank}</span>
+              <span class="text-lg font-semibold text-gray-800">{bankDetails.bank}</span>
+            </div>
+
+            <!-- IBAN -->
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <span class="text-sm text-gray-500 block mb-1">{t.donate.iban}</span>
+              <div class="flex items-center gap-3">
+                <span class="text-xl font-mono font-bold text-kosovo-blue tracking-wider" id="iban-display">{bankDetails.iban}</span>
+                <button id="copy-iban" class="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="Kopieren">
+                  <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- BIC -->
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <span class="text-sm text-gray-500 block mb-1">{t.donate.bic}</span>
+              <span class="text-lg font-mono font-semibold text-gray-800">{bankDetails.bic}</span>
+            </div>
+
+            <!-- Reference -->
+            <div class="p-4 bg-kosovo-gold/10 rounded-xl border-2 border-kosovo-gold/20">
+              <span class="text-sm text-gray-500 block mb-1">{t.donate.reference}</span>
+              <span class="text-lg font-semibold text-kosovo-gold-dark">{t.donate.referenceText}</span>
+            </div>
+          </div>
+
+          <!-- Tax Note -->
+          <div class="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3">
+            <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-green-800">{t.donate.taxDeductible}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zakat Tab -->
+    <div class="donate-tab-content hidden" id="tab-zakat">
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Zakat Calculator -->
+        <div class="bg-white rounded-3xl p-8 shadow-xl scroll-animate">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-gray-800">
+                {lang === 'de' ? 'Zakat-Rechner' : lang === 'sq' ? 'Kalkulatori i Zekatit' : 'حاسبة الزكاة'}
+              </h3>
+              <p class="text-gray-500 text-sm">
+                {lang === 'de' ? 'Berechnen Sie Ihre jährliche Zakat' : lang === 'sq' ? 'Llogaritni zekatin tuaj vjetor' : 'احسب زكاتك السنوية'}
+              </p>
+            </div>
+          </div>
+
+          <!-- Calculator Form -->
+          <div class="space-y-4 mb-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {lang === 'de' ? 'Bargeld & Bankguthaben' : lang === 'sq' ? 'Para & Llogari Bankare' : 'النقد والحسابات البنكية'}
+              </label>
+              <input type="number" id="zakat-cash" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none" placeholder="0" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {lang === 'de' ? 'Gold & Silber (Wert)' : lang === 'sq' ? 'Ari & Argjendi (Vlera)' : 'الذهب والفضة (القيمة)'}
+              </label>
+              <input type="number" id="zakat-gold" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none" placeholder="0" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {lang === 'de' ? 'Geschäftsvermögen' : lang === 'sq' ? 'Pasuri Biznesi' : 'أصول الأعمال'}
+              </label>
+              <input type="number" id="zakat-business" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none" placeholder="0" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {lang === 'de' ? 'Schulden abziehen' : lang === 'sq' ? 'Zbrit borxhet' : 'خصم الديون'}
+              </label>
+              <input type="number" id="zakat-debts" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none" placeholder="0" />
+            </div>
+          </div>
+
+          <!-- Calculate Button -->
+          <button id="calculate-zakat" class="w-full py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300">
+            {lang === 'de' ? 'Zakat berechnen' : lang === 'sq' ? 'Llogarit Zekatin' : 'احسب الزكاة'}
+          </button>
+
+          <!-- Result -->
+          <div id="zakat-result" class="hidden mt-6 p-6 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border border-green-200">
+            <div class="text-center">
+              <span class="text-gray-600 block mb-2">
+                {lang === 'de' ? 'Ihre Zakat beträgt' : lang === 'sq' ? 'Zekati juaj është' : 'زكاتك هي'}
+              </span>
+              <span id="zakat-amount" class="text-4xl font-bold text-green-600">0€</span>
+              <p class="text-sm text-gray-500 mt-2">
+                {lang === 'de' ? '(2,5% des zakatpflichtigen Vermögens)' : lang === 'sq' ? '(2.5% e pasurisë së zekatshme)' : '(2.5٪ من الأموال الزكوية)'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zakat Info -->
+        <div class="space-y-6 scroll-animate">
+          <!-- Nisab Info -->
+          <div class="bg-white rounded-3xl p-8 shadow-xl">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">
+              {lang === 'de' ? 'Was ist Nisab?' : lang === 'sq' ? 'Çfarë është Nisabi?' : 'ما هو النصاب؟'}
+            </h3>
+            <p class="text-gray-600 mb-4">
+              {lang === 'de' ? 'Nisab ist der Mindestwert, ab dem Zakat fällig wird. Er entspricht:' :
+               lang === 'sq' ? 'Nisabi është vlera minimale nga e cila bëhet obligim zekati. Ai barazohet me:' :
+               'النصاب هو الحد الأدنى للمال الذي تجب فيه الزكاة. وهو يعادل:'}
+            </p>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="p-4 bg-yellow-50 rounded-xl text-center">
+                <svg class="w-8 h-8 mx-auto text-yellow-600 mb-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/>
+                </svg>
+                <span class="font-bold text-yellow-700">{zakatInfo.nisab.gold[lang]}</span>
+                <span class="block text-xs text-yellow-600 mt-1">{lang === 'de' ? 'Gold' : lang === 'sq' ? 'Ari' : 'ذهب'}</span>
+              </div>
+              <div class="p-4 bg-gray-100 rounded-xl text-center">
+                <svg class="w-8 h-8 mx-auto text-gray-600 mb-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/>
+                </svg>
+                <span class="font-bold text-gray-700">{zakatInfo.nisab.silver[lang]}</span>
+                <span class="block text-xs text-gray-600 mt-1">{lang === 'de' ? 'Silber' : lang === 'sq' ? 'Argjend' : 'فضة'}</span>
+              </div>
+            </div>
+            <div class="mt-4 p-4 bg-kosovo-blue/10 rounded-xl text-center">
+              <span class="text-kosovo-blue font-bold text-lg">{lang === 'de' ? 'Aktueller Nisab-Wert: ' : lang === 'sq' ? 'Vlera aktuale e Nisabit: ' : 'قيمة النصاب الحالية: '}{zakatInfo.nisab.value}</span>
+            </div>
+          </div>
+
+          <!-- Sadaqa Info -->
+          <div class="bg-white rounded-3xl p-8 shadow-xl">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">
+              {lang === 'de' ? 'Sadaqa - Freiwillige Spende' : lang === 'sq' ? 'Sadaka - Donacion Vullnetar' : 'الصدقة - التبرع الطوعي'}
+            </h3>
+            <p class="text-gray-600 mb-4">
+              {lang === 'de' ? 'Sadaqa ist eine freiwillige Spende ohne festen Betrag. Sie kann jederzeit gegeben werden und bringt großen Segen.' :
+               lang === 'sq' ? 'Sadakaja është donacion vullnetar pa shumë të caktuar. Mund të jepet në çdo kohë dhe sjell begati të madhe.' :
+               'الصدقة هي تبرع طوعي بدون مبلغ محدد. يمكن إعطاؤها في أي وقت وتجلب بركة كبيرة.'}
+            </p>
+            <blockquote class="p-4 bg-gray-50 rounded-xl border-l-4 border-kosovo-gold italic text-gray-600">
+              "{lang === 'de' ? 'Die Sadaqa löscht Sünden wie Wasser das Feuer löscht.' :
+                lang === 'sq' ? 'Sadakaja i fshin mëkatet siç e shuan uji zjarrin.' :
+                'الصدقة تطفئ الخطيئة كما يطفئ الماء النار.'}"
+              <span class="block text-sm text-gray-500 mt-2 not-italic">— {lang === 'de' ? 'Prophet Muhammad ﷺ' : lang === 'sq' ? 'Profeti Muhamed ﷺ' : 'النبي محمد ﷺ'}</span>
+            </blockquote>
+          </div>
+
+          <!-- Donate Zakat Button -->
+          <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-3xl p-8 text-center">
+            <h3 class="text-2xl font-bold text-white mb-4">
+              {lang === 'de' ? 'Zakat an Kosova e.V. spenden' : lang === 'sq' ? 'Dhuro Zekatin tek Kosova e.V.' : 'تبرع بالزكاة لجمعية كوسوفا'}
+            </h3>
+            <p class="text-white/80 mb-6">
+              {lang === 'de' ? 'Wir verteilen Ihre Zakat an Bedürftige in München und weltweit.' :
+               lang === 'sq' ? 'Ne e shpërndajmë zekatin tuaj te nevojtarët në Mynih dhe në mbarë botën.' :
+               'نوزع زكاتكم على المحتاجين في ميونخ وحول العالم.'}
+            </p>
+            <a href="#contact" class="inline-block px-8 py-4 bg-white text-green-600 font-semibold rounded-xl hover:bg-gray-100 transition-all">
+              {lang === 'de' ? 'Jetzt Zakat spenden' : lang === 'sq' ? 'Dhuro Zekatin tani' : 'تبرع بالزكاة الآن'}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Options -->
+    <div class="mt-16 text-center scroll-animate">
+      <div class="inline-flex flex-wrap justify-center gap-4">
+        <div class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white/80">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          </svg>
+          <span>{lang === 'de' ? 'Barspende in der Moschee' : lang === 'sq' ? 'Donacion me para të gatshme në xhami' : 'تبرع نقدي في المسجد'}</span>
+        </div>
+        <div class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white/80">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-5 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm5-3H7V5h10v12z"/>
+          </svg>
+          <span>PayPal: spenden@kosova-ev.de</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+  .donate-tab-btn {
+    @apply bg-white/10 text-white/80 border border-white/20;
+  }
+  .donate-tab-btn:hover {
+    @apply bg-white/20 text-white;
+  }
+  .donate-tab-btn.active {
+    @apply bg-white text-kosovo-blue shadow-lg border-white;
+  }
+
+  .donate-tab-content {
+    @apply transition-all duration-500;
+  }
+  .donate-tab-content.hidden {
+    @apply hidden;
+  }
+
+  .donation-amount-btn.active {
+    @apply border-kosovo-blue bg-kosovo-blue/5;
+  }
+
+  .progress-bar {
+    animation: progress-fill 1.5s ease-out forwards;
+  }
+
+  @keyframes progress-fill {
+    from {
+      width: 0%;
+    }
+  }
+</style>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.donate-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.getAttribute('data-tab');
+
+      // Update active tab
+      document.querySelectorAll('.donate-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Show/hide content
+      document.querySelectorAll('.donate-tab-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+
+      const targetContent = document.getElementById(`tab-${tab}`);
+      if (targetContent) {
+        targetContent.classList.remove('hidden');
+      }
+    });
+  });
+
+  // Donation amount selection
+  document.querySelectorAll('.donation-amount-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.donation-amount-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const amount = btn.getAttribute('data-amount');
+      const customInput = document.getElementById('custom-amount') as HTMLInputElement;
+      if (customInput) {
+        customInput.value = amount || '';
+      }
+    });
+  });
+
+  // Copy IBAN
+  const copyBtn = document.getElementById('copy-iban');
+  const ibanDisplay = document.getElementById('iban-display');
+  if (copyBtn && ibanDisplay) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(ibanDisplay.textContent?.replace(/\s/g, '') || '');
+      copyBtn.innerHTML = '<svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+      setTimeout(() => {
+        copyBtn.innerHTML = '<svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+      }, 2000);
+    });
+  }
+
+  // Zakat Calculator
+  const calculateBtn = document.getElementById('calculate-zakat');
+  if (calculateBtn) {
+    calculateBtn.addEventListener('click', () => {
+      const cash = parseFloat((document.getElementById('zakat-cash') as HTMLInputElement)?.value || '0');
+      const gold = parseFloat((document.getElementById('zakat-gold') as HTMLInputElement)?.value || '0');
+      const business = parseFloat((document.getElementById('zakat-business') as HTMLInputElement)?.value || '0');
+      const debts = parseFloat((document.getElementById('zakat-debts') as HTMLInputElement)?.value || '0');
+
+      const total = cash + gold + business - debts;
+      const nisab = 5500; // Approximate current Nisab in EUR
+      const zakat = total >= nisab ? total * 0.025 : 0;
+
+      const resultDiv = document.getElementById('zakat-result');
+      const amountSpan = document.getElementById('zakat-amount');
+      if (resultDiv && amountSpan) {
+        resultDiv.classList.remove('hidden');
+        amountSpan.textContent = zakat.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '€';
+      }
+    });
+  }
+</script>

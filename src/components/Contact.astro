@@ -8,117 +8,521 @@ interface Props {
 const { lang } = Astro.props;
 const t = translations[lang];
 
-// Placeholder contact info - to be filled in
+// Contact info
 const contactInfo = {
   address: 'Musterstraße 123, 80333 München',
   phone: '+49 89 12345678',
+  whatsapp: '+49 176 12345678',
   email: 'info@kosova-muenchen.de',
+  coordinates: { lat: 48.1351, lng: 11.5820 }, // Munich center placeholder
+};
+
+// Opening hours
+const openingHours = {
+  de: [
+    { day: 'Montag - Donnerstag', hours: '09:00 - 21:00' },
+    { day: 'Freitag', hours: '09:00 - 22:00', special: 'Jummah 13:30' },
+    { day: 'Samstag', hours: '10:00 - 20:00' },
+    { day: 'Sonntag', hours: '08:00 - 20:00', special: 'Koranschule 10:00' }
+  ],
+  sq: [
+    { day: 'E Hënë - E Enjte', hours: '09:00 - 21:00' },
+    { day: 'E Premte', hours: '09:00 - 22:00', special: 'Xhumaja 13:30' },
+    { day: 'E Shtunë', hours: '10:00 - 20:00' },
+    { day: 'E Diel', hours: '08:00 - 20:00', special: 'Shkolla e Kuranit 10:00' }
+  ],
+  ar: [
+    { day: 'الاثنين - الخميس', hours: '09:00 - 21:00' },
+    { day: 'الجمعة', hours: '09:00 - 22:00', special: 'صلاة الجمعة 13:30' },
+    { day: 'السبت', hours: '10:00 - 20:00' },
+    { day: 'الأحد', hours: '08:00 - 20:00', special: 'مدرسة القرآن 10:00' }
+  ]
+};
+
+// Directions
+const directions = {
+  de: {
+    public: {
+      title: 'Öffentliche Verkehrsmittel',
+      steps: [
+        'U-Bahn U3/U6 bis Marienplatz',
+        'Bus 52 Richtung Moosach',
+        'Haltestelle "Musterstraße" (5 Min. Fußweg)'
+      ]
+    },
+    car: {
+      title: 'Mit dem Auto',
+      steps: [
+        'A9 Ausfahrt München-Schwabing',
+        'B2 Richtung Zentrum',
+        'Parkplätze direkt vor der Moschee'
+      ]
+    }
+  },
+  sq: {
+    public: {
+      title: 'Transporti Publik',
+      steps: [
+        'Metro U3/U6 deri në Marienplatz',
+        'Autobus 52 drejtim Moosach',
+        'Stacioni "Musterstraße" (5 min. në këmbë)'
+      ]
+    },
+    car: {
+      title: 'Me Makinë',
+      steps: [
+        'A9 dalje München-Schwabing',
+        'B2 drejtim qendër',
+        'Parkim direkt para xhamisë'
+      ]
+    }
+  },
+  ar: {
+    public: {
+      title: 'وسائل النقل العام',
+      steps: [
+        'مترو U3/U6 حتى Marienplatz',
+        'حافلة 52 اتجاه Moosach',
+        'محطة "Musterstraße" (5 دقائق سيراً)'
+      ]
+    },
+    car: {
+      title: 'بالسيارة',
+      steps: [
+        'A9 مخرج München-Schwabing',
+        'B2 اتجاه المركز',
+        'مواقف أمام المسجد مباشرة'
+      ]
+    }
+  }
+};
+
+// Social media
+const socialMedia = [
+  { name: 'Facebook', icon: 'facebook', url: 'https://facebook.com/kosovaev', color: '#1877F2' },
+  { name: 'Instagram', icon: 'instagram', url: 'https://instagram.com/kosovaev', color: '#E4405F' },
+  { name: 'YouTube', icon: 'youtube', url: 'https://youtube.com/kosovaev', color: '#FF0000' },
+  { name: 'WhatsApp', icon: 'whatsapp', url: `https://wa.me/${contactInfo.whatsapp.replace(/\D/g, '')}`, color: '#25D366' }
+];
+
+// Quick contact subjects
+const subjects = {
+  de: ['Allgemeine Anfrage', 'Mitgliedschaft', 'Veranstaltungen', 'Spenden', 'Religiöse Beratung', 'Koranschule', 'Sonstiges'],
+  sq: ['Pyetje e Përgjithshme', 'Anëtarësia', 'Evenimentet', 'Donacionet', 'Këshillim Fetar', 'Shkolla e Kuranit', 'Të tjera'],
+  ar: ['استفسار عام', 'العضوية', 'الفعاليات', 'التبرعات', 'الإرشاد الديني', 'مدرسة القرآن', 'أخرى']
 };
 ---
 
-<section id="contact" class="py-20 md:py-32 bg-white relative overflow-hidden">
-  <!-- Decorative -->
-  <div class="absolute top-0 left-0 w-64 h-64 bg-kosovo-blue/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+<section id="contact" class="py-20 md:py-32 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden">
+  <!-- Decorative Elements -->
+  <div class="absolute top-0 left-0 w-96 h-96 bg-kosovo-blue/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+  <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-kosovo-gold/5 rounded-full blur-3xl translate-x-1/4 translate-y-1/4"></div>
+
+  <!-- Islamic Pattern -->
+  <div class="absolute inset-0 opacity-[0.02]" style="background-image: url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23244AA5' stroke-width='0.5'/%3E%3C/svg%3E\");"></div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <!-- Section Header -->
-    <div class="text-center mb-16">
-      <span class="inline-block px-4 py-2 bg-kosovo-blue/10 text-kosovo-blue text-sm font-semibold rounded-full mb-4">
-        📍 {t.contact.subtitle}
+    <div class="text-center mb-16 scroll-animate">
+      <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-kosovo-blue/10 to-kosovo-gold/10 text-kosovo-blue text-sm font-semibold rounded-full mb-6 border border-kosovo-blue/20">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+        </svg>
+        {t.contact.subtitle}
       </span>
-      <h2 class="section-title">{t.contact.title}</h2>
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{t.contact.title}</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        {lang === 'de' ? 'Wir freuen uns auf Ihren Besuch und beantworten gerne Ihre Fragen.' :
+         lang === 'sq' ? 'Jemi të lumtur për vizitën tuaj dhe përgjigjen e pyetjeve tuaja.' :
+         'نتطلع لزيارتكم ونسعد بالإجابة على أسئلتكم.'}
+      </p>
+    </div>
+
+    <!-- Quick Contact Cards -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-16 scroll-animate">
+      <!-- Phone -->
+      <a href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-kosovo-blue/30">
+        <div class="w-14 h-14 bg-gradient-to-br from-kosovo-blue to-kosovo-blue-dark rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+          </svg>
+        </div>
+        <h3 class="font-bold text-gray-800 mb-1">{t.contact.phone}</h3>
+        <p class="text-kosovo-blue font-medium">{contactInfo.phone}</p>
+      </a>
+
+      <!-- WhatsApp -->
+      <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-green-300">
+        <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+        </div>
+        <h3 class="font-bold text-gray-800 mb-1">WhatsApp</h3>
+        <p class="text-green-600 font-medium">{contactInfo.whatsapp}</p>
+      </a>
+
+      <!-- Email -->
+      <a href={`mailto:${contactInfo.email}`} class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-kosovo-gold/30">
+        <div class="w-14 h-14 bg-gradient-to-br from-kosovo-gold to-kosovo-gold-dark rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          </svg>
+        </div>
+        <h3 class="font-bold text-gray-800 mb-1">{t.contact.email}</h3>
+        <p class="text-kosovo-gold-dark font-medium text-sm">{contactInfo.email}</p>
+      </a>
+
+      <!-- Location -->
+      <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`} target="_blank" rel="noopener noreferrer" class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-purple-300">
+        <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+        </div>
+        <h3 class="font-bold text-gray-800 mb-1">{t.contact.address}</h3>
+        <p class="text-purple-600 font-medium text-sm">{contactInfo.address}</p>
+      </a>
     </div>
 
     <div class="grid lg:grid-cols-2 gap-12">
-      <!-- Contact Info -->
-      <div class="space-y-6">
-        <!-- Address -->
-        <div class="card flex items-start gap-5">
-          <div class="w-14 h-14 bg-kosovo-blue/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-            <svg class="w-7 h-7 text-kosovo-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-800 mb-1">{t.contact.address}</h3>
-            <p class="text-gray-600">{contactInfo.address}</p>
-          </div>
-        </div>
+      <!-- Left Column: Map & Directions -->
+      <div class="space-y-8">
+        <!-- Map -->
+        <div class="scroll-animate">
+          <div class="relative rounded-3xl overflow-hidden shadow-xl border border-gray-200 bg-gray-100" style="height: 350px;">
+            <!-- OpenStreetMap iframe -->
+            <iframe
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=${contactInfo.coordinates.lng - 0.01}%2C${contactInfo.coordinates.lat - 0.005}%2C${contactInfo.coordinates.lng + 0.01}%2C${contactInfo.coordinates.lat + 0.005}&layer=mapnik&marker=${contactInfo.coordinates.lat}%2C${contactInfo.coordinates.lng}`}
+              class="w-full h-full border-0"
+              loading="lazy"
+              title="Kosova e.V. Location"
+            ></iframe>
 
-        <!-- Phone -->
-        <div class="card flex items-start gap-5">
-          <div class="w-14 h-14 bg-kosovo-gold/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-            <svg class="w-7 h-7 text-kosovo-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-            </svg>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-800 mb-1">{t.contact.phone}</h3>
-            <a href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} class="text-kosovo-blue hover:underline">
-              {contactInfo.phone}
+            <!-- Overlay with mosque marker -->
+            <div class="absolute top-4 left-4 bg-white rounded-xl shadow-lg p-4 max-w-[200px]">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-kosovo-blue rounded-lg flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                  </svg>
+                </div>
+                <div>
+                  <span class="font-bold text-gray-800 text-sm block">Kosova e.V.</span>
+                  <span class="text-xs text-gray-500">{lang === 'de' ? 'Albanische Moschee' : lang === 'sq' ? 'Xhamia Shqiptare' : 'المسجد الألباني'}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Open in Maps button -->
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="absolute bottom-4 right-4 bg-white rounded-xl shadow-lg px-4 py-2 flex items-center gap-2 hover:bg-gray-50 transition-colors"
+            >
+              <svg class="w-5 h-5 text-kosovo-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+              </svg>
+              <span class="text-sm font-medium text-gray-700">
+                {lang === 'de' ? 'Vergrößern' : lang === 'sq' ? 'Zmadhoni' : 'تكبير'}
+              </span>
             </a>
           </div>
         </div>
 
-        <!-- Email -->
-        <div class="card flex items-start gap-5">
-          <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-            <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-            </svg>
+        <!-- Directions -->
+        <div class="grid md:grid-cols-2 gap-4 scroll-animate">
+          <!-- Public Transport -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                </svg>
+              </div>
+              <h3 class="font-bold text-gray-800">{directions[lang].public.title}</h3>
+            </div>
+            <ul class="space-y-2">
+              {directions[lang].public.steps.map((step) => (
+                <li class="flex items-start gap-2 text-gray-600 text-sm">
+                  <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <div>
-            <h3 class="font-semibold text-gray-800 mb-1">{t.contact.email}</h3>
-            <a href={`mailto:${contactInfo.email}`} class="text-kosovo-blue hover:underline">
-              {contactInfo.email}
-            </a>
+
+          <!-- By Car -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <h3 class="font-bold text-gray-800">{directions[lang].car.title}</h3>
+            </div>
+            <ul class="space-y-2">
+              {directions[lang].car.steps.map((step) => (
+                <li class="flex items-start gap-2 text-gray-600 text-sm">
+                  <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ul>
+            <div class="mt-4 p-3 bg-green-50 rounded-lg flex items-center gap-2">
+              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-sm text-green-700 font-medium">
+                {lang === 'de' ? 'Kostenlose Parkplätze' : lang === 'sq' ? 'Parkim falas' : 'مواقف مجانية'}
+              </span>
+            </div>
           </div>
         </div>
 
-        <!-- Hours -->
-        <div class="card flex items-start gap-5 bg-gradient-to-r from-kosovo-blue/5 to-transparent">
-          <div class="w-14 h-14 bg-kosovo-blue rounded-2xl flex items-center justify-center flex-shrink-0">
-            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
+        <!-- Opening Hours -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 scroll-animate">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 bg-kosovo-blue/10 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-kosovo-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <h3 class="font-bold text-gray-800 text-lg">{t.contact.hours}</h3>
           </div>
-          <div>
-            <h3 class="font-semibold text-gray-800 mb-1">{t.contact.hours}</h3>
-            <p class="text-gray-600">{t.contact.hoursText}</p>
+
+          <div class="space-y-3">
+            {openingHours[lang].map((item, index) => (
+              <div class={`flex items-center justify-between p-3 rounded-xl ${index === 1 ? 'bg-kosovo-gold/10 border border-kosovo-gold/20' : 'bg-gray-50'}`}>
+                <div class="flex items-center gap-3">
+                  <span class="font-medium text-gray-800">{item.day}</span>
+                  {item.special && (
+                    <span class={`text-xs px-2 py-1 rounded-full ${index === 1 ? 'bg-kosovo-gold/20 text-kosovo-gold-dark' : 'bg-kosovo-blue/10 text-kosovo-blue'}`}>
+                      {item.special}
+                    </span>
+                  )}
+                </div>
+                <span class="font-mono text-gray-600">{item.hours}</span>
+              </div>
+            ))}
+          </div>
+
+          <div class="mt-6 p-4 bg-gradient-to-r from-kosovo-blue/5 to-kosovo-gold/5 rounded-xl flex items-center gap-3">
+            <svg class="w-5 h-5 text-kosovo-blue" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            <span class="text-sm text-gray-600">
+              {lang === 'de' ? 'Die Moschee ist zu allen Gebetszeiten geöffnet' :
+               lang === 'sq' ? 'Xhamia është e hapur në të gjitha kohët e namazit' :
+               'المسجد مفتوح في جميع أوقات الصلاة'}
+            </span>
           </div>
         </div>
       </div>
 
-      <!-- Map Placeholder -->
-      <div class="relative">
-        <div class="aspect-square lg:aspect-auto lg:h-full min-h-[400px] bg-gradient-to-br from-kosovo-blue/10 to-kosovo-gold/10 rounded-3xl overflow-hidden border-2 border-kosovo-blue/20">
-          <!-- Map placeholder -->
-          <div class="w-full h-full flex items-center justify-center">
-            <div class="text-center p-8">
-              <div class="w-20 h-20 mx-auto bg-kosovo-blue/10 rounded-full flex items-center justify-center mb-4">
-                <svg class="w-10 h-10 text-kosovo-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
-                </svg>
-              </div>
-              <p class="text-gray-600 mb-4">
-                {lang === 'de' ? 'Google Maps wird hier eingebettet' : lang === 'sq' ? 'Google Maps do të vendoset këtu' : 'سيتم تضمين خرائط جوجل هنا'}
-              </p>
+      <!-- Right Column: Contact Form -->
+      <div class="scroll-animate">
+        <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">
+            {lang === 'de' ? 'Schreiben Sie uns' : lang === 'sq' ? 'Na shkruani' : 'راسلنا'}
+          </h3>
+          <p class="text-gray-600 mb-8">
+            {lang === 'de' ? 'Wir antworten innerhalb von 24 Stunden' :
+             lang === 'sq' ? 'Përgjigjemi brenda 24 orëve' :
+             'نرد خلال 24 ساعة'}
+          </p>
+
+          <form id="contact-form" class="space-y-6">
+            <!-- Name -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {lang === 'de' ? 'Ihr Name' : lang === 'sq' ? 'Emri juaj' : 'اسمك'} *
+              </label>
+              <input
+                type="text"
+                name="name"
+                required
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-kosovo-blue focus:outline-none transition-colors"
+                placeholder={lang === 'de' ? 'Max Mustermann' : lang === 'sq' ? 'Emri Mbiemri' : 'الاسم الكامل'}
+              />
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {lang === 'de' ? 'E-Mail-Adresse' : lang === 'sq' ? 'Adresa e emailit' : 'البريد الإلكتروني'} *
+              </label>
+              <input
+                type="email"
+                name="email"
+                required
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-kosovo-blue focus:outline-none transition-colors"
+                placeholder="example@email.de"
+              />
+            </div>
+
+            <!-- Phone (optional) -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {lang === 'de' ? 'Telefon (optional)' : lang === 'sq' ? 'Telefoni (opsionale)' : 'الهاتف (اختياري)'}
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-kosovo-blue focus:outline-none transition-colors"
+                placeholder="+49 123 456789"
+              />
+            </div>
+
+            <!-- Subject -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {lang === 'de' ? 'Betreff' : lang === 'sq' ? 'Subjekti' : 'الموضوع'} *
+              </label>
+              <select
+                name="subject"
+                required
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-kosovo-blue focus:outline-none transition-colors bg-white"
+              >
+                <option value="">{lang === 'de' ? 'Bitte wählen...' : lang === 'sq' ? 'Ju lutem zgjidhni...' : 'يرجى الاختيار...'}</option>
+                {subjects[lang].map((subject) => (
+                  <option value={subject}>{subject}</option>
+                ))}
+              </select>
+            </div>
+
+            <!-- Message -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {lang === 'de' ? 'Ihre Nachricht' : lang === 'sq' ? 'Mesazhi juaj' : 'رسالتك'} *
+              </label>
+              <textarea
+                name="message"
+                required
+                rows="5"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-kosovo-blue focus:outline-none transition-colors resize-none"
+                placeholder={lang === 'de' ? 'Wie können wir Ihnen helfen?' : lang === 'sq' ? 'Si mund t\'ju ndihmojmë?' : 'كيف يمكننا مساعدتك؟'}
+              ></textarea>
+            </div>
+
+            <!-- Privacy -->
+            <div class="flex items-start gap-3">
+              <input
+                type="checkbox"
+                name="privacy"
+                required
+                class="mt-1 w-5 h-5 text-kosovo-blue rounded border-gray-300 focus:ring-kosovo-blue"
+              />
+              <label class="text-sm text-gray-600">
+                {lang === 'de' ? 'Ich stimme der Verarbeitung meiner Daten gemäß der Datenschutzerklärung zu.' :
+                 lang === 'sq' ? 'Unë pajtohem me përpunimin e të dhënave të mia sipas politikës së privatësisë.' :
+                 'أوافق على معالجة بياناتي وفقاً لسياسة الخصوصية.'} *
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="w-full py-4 bg-gradient-to-r from-kosovo-blue to-kosovo-blue-dark text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-kosovo-blue/30 transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <span>{lang === 'de' ? 'Nachricht senden' : lang === 'sq' ? 'Dërgo mesazhin' : 'إرسال الرسالة'}</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+              </svg>
+            </button>
+          </form>
+
+          <!-- Success Message -->
+          <div id="form-success" class="hidden mt-6 p-6 bg-green-50 border border-green-200 rounded-xl text-center">
+            <div class="w-16 h-16 mx-auto bg-green-500 rounded-full flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+            </div>
+            <h4 class="text-lg font-bold text-green-800 mb-2">
+              {lang === 'de' ? 'Nachricht gesendet!' : lang === 'sq' ? 'Mesazhi u dërgua!' : 'تم إرسال الرسالة!'}
+            </h4>
+            <p class="text-green-700">
+              {lang === 'de' ? 'Wir werden uns schnellstmöglich bei Ihnen melden.' :
+               lang === 'sq' ? 'Do t\'ju kontaktojmë sa më shpejt.' :
+               'سنتواصل معك في أقرب وقت ممكن.'}
+            </p>
+          </div>
+        </div>
+
+        <!-- Social Media -->
+        <div class="mt-8 scroll-animate">
+          <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">
+            {lang === 'de' ? 'Folgen Sie uns' : lang === 'sq' ? 'Na ndiqni' : 'تابعنا'}
+          </h3>
+          <div class="flex justify-center gap-4">
+            {socialMedia.map((social) => (
               <a
-                href="https://maps.google.com"
+                href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 btn-secondary text-sm"
+                class="w-14 h-14 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-300 group border border-gray-100"
+                style={`--social-color: ${social.color}`}
               >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                </svg>
-                {lang === 'de' ? 'In Google Maps öffnen' : lang === 'sq' ? 'Hap në Google Maps' : 'افتح في خرائط جوجل'}
+                {social.icon === 'facebook' && (
+                  <svg class="w-6 h-6 text-gray-600 group-hover:text-[#1877F2] transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                )}
+                {social.icon === 'instagram' && (
+                  <svg class="w-6 h-6 text-gray-600 group-hover:text-[#E4405F] transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                  </svg>
+                )}
+                {social.icon === 'youtube' && (
+                  <svg class="w-6 h-6 text-gray-600 group-hover:text-[#FF0000] transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                )}
+                {social.icon === 'whatsapp' && (
+                  <svg class="w-6 h-6 text-gray-600 group-hover:text-[#25D366] transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                )}
               </a>
-            </div>
+            ))}
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  // Form handling
+  const form = document.getElementById('contact-form');
+  const successMessage = document.getElementById('form-success');
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Simulate form submission
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+        submitBtn.disabled = true;
+      }
+
+      // Simulate API call
+      setTimeout(() => {
+        if (form && successMessage) {
+          form.style.display = 'none';
+          successMessage.classList.remove('hidden');
+        }
+      }, 1500);
+    });
+  }
+</script>
