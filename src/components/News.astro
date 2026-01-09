@@ -1,0 +1,243 @@
+---
+import { translations } from '../i18n/translations';
+
+interface Props {
+  lang: keyof typeof translations;
+}
+
+const { lang } = Astro.props;
+
+const newsItems = [
+  {
+    id: 1,
+    type: 'announcement',
+    title: lang === 'de' ? 'Ramadan 2025 - Vorbereitungen' : lang === 'sq' ? 'Ramazani 2025 - Përgatitjet' : 'رمضان 2025 - التحضيرات',
+    excerpt: lang === 'de' ? 'Der heilige Monat Ramadan beginnt voraussichtlich Ende Februar. Wir bereiten ein umfangreiches Programm vor.' : lang === 'sq' ? 'Muaji i shenjtë i Ramazanit fillon rreth fundit të shkurtit. Po përgatisim një program të gjerë.' : 'يبدأ شهر رمضان المبارك في نهاية فبراير تقريباً. نحن نحضر برنامجاً شاملاً.',
+    date: '2025-01-08',
+    image: null,
+    category: lang === 'de' ? 'Ankündigung' : lang === 'sq' ? 'Njoftim' : 'إعلان',
+    categoryColor: 'bg-purple-100 text-purple-700',
+    featured: true,
+  },
+  {
+    id: 2,
+    type: 'event',
+    title: lang === 'de' ? 'Koranwettbewerb für Kinder' : lang === 'sq' ? 'Konkursi i Kuranit për fëmijë' : 'مسابقة القرآن للأطفال',
+    excerpt: lang === 'de' ? 'Am 25. Januar findet unser jährlicher Koranwettbewerb für Kinder statt. Anmeldung ab sofort möglich!' : lang === 'sq' ? 'Më 25 janar mbahet konkursi ynë vjetor i Kuranit për fëmijë. Regjistrimi i hapur!' : 'في 25 يناير تقام مسابقة القرآن السنوية للأطفال. التسجيل مفتوح الآن!',
+    date: '2025-01-05',
+    image: null,
+    category: lang === 'de' ? 'Veranstaltung' : lang === 'sq' ? 'Ngjarje' : 'فعالية',
+    categoryColor: 'bg-green-100 text-green-700',
+    featured: false,
+  },
+  {
+    id: 3,
+    type: 'news',
+    title: lang === 'de' ? 'Neue Koranlehrer eingestellt' : lang === 'sq' ? 'Mësues të rinj të Kuranit' : 'معلمون جدد للقرآن',
+    excerpt: lang === 'de' ? 'Wir freuen uns, zwei neue qualifizierte Koranlehrer in unserem Team begrüßen zu dürfen.' : lang === 'sq' ? 'Jemi të lumtur të mirëpresim dy mësues të rinj të kualifikuar të Kuranit në ekipin tonë.' : 'يسعدنا الترحيب بمعلمين جديدين مؤهلين للقرآن في فريقنا.',
+    date: '2025-01-02',
+    image: null,
+    category: lang === 'de' ? 'Neuigkeiten' : lang === 'sq' ? 'Lajme' : 'أخبار',
+    categoryColor: 'bg-blue-100 text-blue-700',
+    featured: false,
+  },
+  {
+    id: 4,
+    type: 'event',
+    title: lang === 'de' ? 'Winterferien-Programm' : lang === 'sq' ? 'Programi i pushimeve dimërore' : 'برنامج العطلة الشتوية',
+    excerpt: lang === 'de' ? 'Besonderes Programm für Kinder während der Winterferien mit Spielen, Lernen und Gemeinschaft.' : lang === 'sq' ? 'Program special për fëmijët gjatë pushimeve dimërore me lojëra, mësim dhe bashkësi.' : 'برنامج خاص للأطفال خلال العطلة الشتوية مع الألعاب والتعلم والمجتمع.',
+    date: '2024-12-28',
+    image: null,
+    category: lang === 'de' ? 'Veranstaltung' : lang === 'sq' ? 'Ngjarje' : 'فعالية',
+    categoryColor: 'bg-green-100 text-green-700',
+    featured: false,
+  },
+];
+
+const upcomingEvents = [
+  {
+    date: '15',
+    month: lang === 'de' ? 'Jan' : lang === 'sq' ? 'Jan' : 'يناير',
+    title: lang === 'de' ? 'Islamischer Vortrag' : lang === 'sq' ? 'Ligjëratë islame' : 'محاضرة إسلامية',
+    time: '19:00',
+  },
+  {
+    date: '25',
+    month: lang === 'de' ? 'Jan' : lang === 'sq' ? 'Jan' : 'يناير',
+    title: lang === 'de' ? 'Koranwettbewerb' : lang === 'sq' ? 'Konkursi i Kuranit' : 'مسابقة القرآن',
+    time: '14:00',
+  },
+  {
+    date: '01',
+    month: lang === 'de' ? 'Mar' : lang === 'sq' ? 'Mar' : 'مارس',
+    title: lang === 'de' ? 'Ramadan Beginn' : lang === 'sq' ? 'Fillimi i Ramazanit' : 'بداية رمضان',
+    time: 'TBD',
+  },
+];
+---
+
+<section id="news" class="section-padding bg-white relative overflow-hidden">
+  <!-- Decorative elements -->
+  <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-kosovo-blue via-kosovo-gold to-kosovo-blue"></div>
+  <div class="absolute -top-40 left-1/4 w-80 h-80 bg-kosovo-blue/5 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-40 right-1/4 w-80 h-80 bg-kosovo-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <span class="badge-primary mb-4">
+        <span>📰</span>
+        <span>{lang === 'de' ? 'Aktuelles' : lang === 'sq' ? 'Aktuale' : 'الأخبار'}</span>
+      </span>
+      <h2 class="section-title">
+        {lang === 'de' ? 'Neuigkeiten & Ankündigungen' : lang === 'sq' ? 'Lajme & Njoftime' : 'الأخبار والإعلانات'}
+      </h2>
+      <p class="section-subtitle">
+        {lang === 'de' ? 'Bleiben Sie auf dem Laufenden über unsere Gemeinde' : lang === 'sq' ? 'Qëndroni të informuar për bashkësinë tonë' : 'ابق على اطلاع بأخبار مجتمعنا'}
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Main News Column -->
+      <div class="lg:col-span-2 space-y-8">
+        {/* Featured News */}
+        {newsItems.filter(item => item.featured).map((item) => (
+          <article class="group relative bg-gradient-to-br from-kosovo-blue to-kosovo-blue-dark rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500">
+            <div class="absolute inset-0 islamic-pattern opacity-10"></div>
+
+            <div class="relative z-10 p-8 md:p-10">
+              <div class="flex flex-wrap items-center gap-3 mb-6">
+                <span class={`px-3 py-1 rounded-full text-sm font-semibold ${item.categoryColor}`}>
+                  {item.category}
+                </span>
+                <span class="px-3 py-1 bg-kosovo-gold text-white rounded-full text-sm font-semibold">
+                  {lang === 'de' ? 'Hervorgehoben' : lang === 'sq' ? 'Theksuar' : 'مميز'}
+                </span>
+                <span class="text-white/60 text-sm">{item.date}</span>
+              </div>
+
+              <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-kosovo-gold transition-colors">
+                {item.title}
+              </h3>
+
+              <p class="text-white/80 text-lg leading-relaxed mb-6">
+                {item.excerpt}
+              </p>
+
+              <a href="#" class="inline-flex items-center gap-2 text-kosovo-gold font-semibold group/link">
+                <span>{lang === 'de' ? 'Weiterlesen' : lang === 'sq' ? 'Lexo më shumë' : 'اقرأ المزيد'}</span>
+                <svg class="w-5 h-5 group-hover/link:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+        ))}
+
+        {/* Regular News Grid */}
+        <div class="grid md:grid-cols-2 gap-6">
+          {newsItems.filter(item => !item.featured).map((item) => (
+            <article class="group card hover:border-kosovo-gold/20">
+              <div class="flex items-center gap-3 mb-4">
+                <span class={`px-3 py-1 rounded-full text-xs font-semibold ${item.categoryColor}`}>
+                  {item.category}
+                </span>
+                <span class="text-gray-400 text-sm">{item.date}</span>
+              </div>
+
+              <h4 class="text-lg font-bold text-gray-800 mb-3 group-hover:text-kosovo-blue transition-colors">
+                {item.title}
+              </h4>
+
+              <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                {item.excerpt}
+              </p>
+
+              <a href="#" class="inline-flex items-center gap-2 text-kosovo-blue text-sm font-semibold group/link">
+                <span>{lang === 'de' ? 'Weiterlesen' : lang === 'sq' ? 'Lexo më shumë' : 'اقرأ المزيد'}</span>
+                <svg class="w-4 h-4 group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-8">
+        {/* Upcoming Events */}
+        <div class="card bg-gradient-to-br from-gray-50 to-white">
+          <h3 class="text-xl font-bold text-kosovo-blue mb-6 flex items-center gap-3">
+            <span class="w-10 h-10 bg-kosovo-gold/10 rounded-xl flex items-center justify-center text-xl">📅</span>
+            {lang === 'de' ? 'Kommende Termine' : lang === 'sq' ? 'Ngjarjet e ardhshme' : 'الفعاليات القادمة'}
+          </h3>
+
+          <div class="space-y-4">
+            {upcomingEvents.map((event, index) => (
+              <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-kosovo-blue/5 transition-colors group cursor-pointer">
+                <div class="w-16 h-16 bg-gradient-to-br from-kosovo-blue to-kosovo-blue-dark rounded-xl flex flex-col items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform">
+                  <span class="text-2xl font-black">{event.date}</span>
+                  <span class="text-xs uppercase opacity-80">{event.month}</span>
+                </div>
+                <div class="flex-1">
+                  <h4 class="font-semibold text-gray-800 group-hover:text-kosovo-blue transition-colors">{event.title}</h4>
+                  <p class="text-sm text-gray-500">{event.time}</p>
+                </div>
+                <svg class="w-5 h-5 text-gray-300 group-hover:text-kosovo-gold group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </div>
+            ))}
+          </div>
+
+          <a href="#events" class="mt-6 block text-center py-3 border-2 border-kosovo-blue text-kosovo-blue font-semibold rounded-xl hover:bg-kosovo-blue hover:text-white transition-colors">
+            {lang === 'de' ? 'Alle Termine anzeigen' : lang === 'sq' ? 'Shiko të gjitha ngjarjet' : 'عرض جميع الفعاليات'}
+          </a>
+        </div>
+
+        {/* Newsletter Signup */}
+        <div class="card bg-gradient-to-br from-kosovo-gold/10 to-kosovo-gold/5 border-kosovo-gold/20">
+          <div class="text-center">
+            <div class="w-16 h-16 mx-auto bg-kosovo-gold/20 rounded-2xl flex items-center justify-center mb-4">
+              <span class="text-3xl">✉️</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">
+              {lang === 'de' ? 'Newsletter' : lang === 'sq' ? 'Buletini' : 'النشرة الإخبارية'}
+            </h3>
+            <p class="text-gray-600 text-sm mb-6">
+              {lang === 'de' ? 'Erhalten Sie Updates direkt in Ihr Postfach' : lang === 'sq' ? 'Merrni përditësime direkt në postën tuaj' : 'احصل على التحديثات مباشرة في بريدك'}
+            </p>
+
+            <form class="space-y-3">
+              <input
+                type="email"
+                placeholder={lang === 'de' ? 'Ihre E-Mail-Adresse' : lang === 'sq' ? 'Adresa juaj e emailit' : 'عنوان بريدك الإلكتروني'}
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-kosovo-gold focus:ring-2 focus:ring-kosovo-gold/20 outline-none transition-all"
+              />
+              <button type="submit" class="w-full btn-primary">
+                {lang === 'de' ? 'Abonnieren' : lang === 'sq' ? 'Abonohu' : 'اشترك'}
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Quick Stats */}
+        <div class="grid grid-cols-2 gap-4">
+          <div class="card text-center bg-kosovo-blue text-white p-5">
+            <div class="text-3xl font-black mb-1">12</div>
+            <div class="text-xs uppercase opacity-80">
+              {lang === 'de' ? 'Events diesen Monat' : lang === 'sq' ? 'Ngjarje këtë muaj' : 'فعاليات هذا الشهر'}
+            </div>
+          </div>
+          <div class="card text-center bg-kosovo-gold text-white p-5">
+            <div class="text-3xl font-black mb-1">45</div>
+            <div class="text-xs uppercase opacity-80">
+              {lang === 'de' ? 'Neue Mitglieder' : lang === 'sq' ? 'Anëtarë të rinj' : 'أعضاء جدد'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

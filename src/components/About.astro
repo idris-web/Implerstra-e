@@ -9,75 +9,302 @@ const { lang } = Astro.props;
 const t = translations[lang];
 
 const values = [
-  { icon: '🕌', title: t.about.value1 },
-  { icon: '🤝', title: t.about.value2 },
-  { icon: '📖', title: t.about.value3 },
-  { icon: '🏛️', title: t.about.value4 },
+  {
+    icon: '🕌',
+    title: t.about.value1,
+    description: lang === 'de' ? 'Stärkung des Glaubens durch Gebet und Gemeinschaft' : lang === 'sq' ? 'Forcimi i besimit përmes namazit dhe bashkësisë' : 'تقوية الإيمان من خلال الصلاة والمجتمع'
+  },
+  {
+    icon: '🤝',
+    title: t.about.value2,
+    description: lang === 'de' ? 'Zusammenhalt und gegenseitige Unterstützung' : lang === 'sq' ? 'Uniteti dhe mbështetja e ndërsjellë' : 'التماسك والدعم المتبادل'
+  },
+  {
+    icon: '📖',
+    title: t.about.value3,
+    description: lang === 'de' ? 'Islamische und weltliche Bildung für alle Altersgruppen' : lang === 'sq' ? 'Arsimi islam dhe laik për të gjitha moshat' : 'التعليم الإسلامي والعلماني لجميع الأعمار'
+  },
+  {
+    icon: '🏛️',
+    title: t.about.value4,
+    description: lang === 'de' ? 'Bewahrung albanischer Traditionen und Bräuche' : lang === 'sq' ? 'Ruajtja e traditave dhe zakoneve shqiptare' : 'الحفاظ على التقاليد والعادات الألبانية'
+  },
 ];
+
+const timeline = [
+  {
+    year: '2014',
+    title: lang === 'de' ? 'Gründung' : lang === 'sq' ? 'Themelimi' : 'التأسيس',
+    description: lang === 'de' ? 'Eine kleine Gruppe albanischer Muslime gründet den Verein Kosova e.V. in München.' : lang === 'sq' ? 'Një grup i vogël myslimanësh shqiptarë themelon shoqatën Kosova e.V. në Mynih.' : 'مجموعة صغيرة من المسلمين الألبان تؤسس جمعية كوسوفا في ميونخ.',
+    icon: '🌟'
+  },
+  {
+    year: '2016',
+    title: lang === 'de' ? 'Erster Gebetsraum' : lang === 'sq' ? 'Dhoma e parë e namazit' : 'أول قاعة صلاة',
+    description: lang === 'de' ? 'Einrichtung unseres ersten eigenen Gebetsraums für die wachsende Gemeinde.' : lang === 'sq' ? 'Krijimi i dhomës sonë të parë të namazit për bashkësinë në rritje.' : 'إنشاء أول قاعة صلاة لنا للمجتمع المتنامي.',
+    icon: '🕌'
+  },
+  {
+    year: '2018',
+    title: lang === 'de' ? 'Koranschule' : lang === 'sq' ? 'Shkolla e Kuranit' : 'مدرسة القرآن',
+    description: lang === 'de' ? 'Start des Koranunterrichts für Kinder und Erwachsene.' : lang === 'sq' ? 'Fillimi i mësimit të Kuranit për fëmijë dhe të rritur.' : 'بدء تعليم القرآن للأطفال والكبار.',
+    icon: '📚'
+  },
+  {
+    year: '2020',
+    title: lang === 'de' ? 'Gemeinschaftszentrum' : lang === 'sq' ? 'Qendra e bashkësisë' : 'مركز المجتمع',
+    description: lang === 'de' ? 'Ausbau zu einem vollwertigen Gemeinschaftszentrum mit vielfältigen Angeboten.' : lang === 'sq' ? 'Zgjerimi në një qendër të plotë bashkësie me oferta të ndryshme.' : 'التوسع إلى مركز مجتمعي متكامل مع عروض متنوعة.',
+    icon: '🏠'
+  },
+  {
+    year: '2024',
+    title: lang === 'de' ? '10 Jahre Jubiläum' : lang === 'sq' ? '10 vjet jubile' : 'الذكرى العاشرة',
+    description: lang === 'de' ? 'Wir feiern 10 Jahre erfolgreiche Gemeindearbeit und blicken auf eine bewegte Geschichte zurück.' : lang === 'sq' ? 'Festojmë 10 vjet punë të suksesshme të bashkësisë dhe shikojmë mbrapa në një histori të lëvizshme.' : 'نحتفل بعشر سنوات من العمل المجتمعي الناجح.',
+    icon: '🎉'
+  },
+];
+
+const facts = [
+  { number: '500+', label: lang === 'de' ? 'Aktive Mitglieder' : lang === 'sq' ? 'Anëtarë aktivë' : 'أعضاء نشطون', icon: '👥' },
+  { number: '5', label: lang === 'de' ? 'Gebete täglich' : lang === 'sq' ? 'Namaze ditore' : 'صلوات يومية', icon: '🕌' },
+  { number: '50+', label: lang === 'de' ? 'Kinder in Koranschule' : lang === 'sq' ? 'Fëmijë në shkollë' : 'أطفال في المدرسة', icon: '👶' },
+  { number: '100+', label: lang === 'de' ? 'Events pro Jahr' : lang === 'sq' ? 'Ngjarje në vit' : 'فعاليات سنوية', icon: '📅' },
+];
+
+const quote = {
+  text: lang === 'de'
+    ? '"Wer einen Weg beschreitet, um Wissen zu erlangen, dem macht Allah den Weg zum Paradies leicht."'
+    : lang === 'sq'
+    ? '"Kush ndjek një rrugë për të kërkuar dituri, Allahu ia lehtëson rrugën drejt Xhenetit."'
+    : '"من سلك طريقاً يلتمس فيه علماً سهل الله له به طريقاً إلى الجنة."',
+  source: lang === 'de' ? '- Prophet Muhammad ﷺ (Sahih Muslim)' : lang === 'sq' ? '- Profeti Muhamed ﷺ (Sahih Muslim)' : '- النبي محمد ﷺ (صحيح مسلم)'
+};
 ---
 
-<section id="about" class="py-20 md:py-32 bg-white relative overflow-hidden">
-  <!-- Decorative background -->
-  <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-kosovo-blue/5 to-transparent"></div>
-  <div class="absolute bottom-0 left-0 w-64 h-64 bg-kosovo-gold/10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+<section id="about" class="section-padding bg-white relative overflow-hidden">
+  <!-- Decorative backgrounds -->
+  <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-kosovo-blue/5 to-transparent pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-96 h-96 bg-kosovo-gold/10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
+  <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-kosovo-blue/5 rounded-full blur-3xl pointer-events-none"></div>
+
+  <!-- Pattern overlay -->
+  <div class="absolute inset-0 islamic-pattern-2 opacity-30 pointer-events-none"></div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <!-- Section Header -->
-    <div class="text-center mb-16">
-      <span class="inline-block px-4 py-2 bg-kosovo-blue/10 text-kosovo-blue text-sm font-semibold rounded-full mb-4">
-        {t.about.subtitle}
+    <div class="text-center mb-20">
+      <span class="badge-primary mb-4">
+        <span>✨</span>
+        <span>{t.about.subtitle}</span>
       </span>
       <h2 class="section-title">{t.about.title}</h2>
+      <p class="section-subtitle">
+        {t.about.description}
+      </p>
     </div>
 
-    <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-      <!-- Left: Image/Visual -->
-      <div class="relative">
-        <div class="aspect-square bg-gradient-to-br from-kosovo-blue to-kosovo-blue-dark rounded-3xl overflow-hidden shadow-2xl">
-          <!-- Placeholder for mosque image -->
-          <div class="w-full h-full flex items-center justify-center islamic-pattern">
-            <div class="text-center p-8">
-              <div class="w-32 h-32 mx-auto bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center mb-6">
-                <svg class="w-20 h-20 text-kosovo-gold" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C12 2 8 6 8 10C8 11.1 8.45 12.1 9.17 12.83L7 15H6V22H18V15H17L14.83 12.83C15.55 12.1 16 11.1 16 10C16 6 12 2 12 2ZM12 4.5C12 4.5 14 7 14 10C14 11.1 13.1 12 12 12C10.9 12 10 11.1 10 10C10 7 12 4.5 12 4.5ZM8 17H16V20H8V17Z"/>
-                </svg>
+    <!-- Main Content Grid -->
+    <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start mb-24">
+      <!-- Left: Image & Stats -->
+      <div class="relative scroll-animate-left">
+        <!-- Main image container -->
+        <div class="relative">
+          <div class="aspect-[4/5] bg-gradient-to-br from-kosovo-blue via-kosovo-blue-dark to-[#0a1f4a] rounded-3xl overflow-hidden shadow-2xl">
+            <!-- Placeholder for mosque image -->
+            <div class="w-full h-full flex items-center justify-center islamic-pattern relative">
+              <!-- Decorative rings -->
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-64 h-64 border border-white/10 rounded-full"></div>
+                <div class="absolute w-48 h-48 border border-white/10 rounded-full"></div>
+                <div class="absolute w-32 h-32 border border-kosovo-gold/20 rounded-full"></div>
               </div>
-              <p class="text-white/80 text-lg font-medium">Est. 2014</p>
-              <p class="text-kosovo-gold text-xl font-bold">München</p>
+
+              <div class="text-center p-8 relative z-10">
+                <div class="w-40 h-40 mx-auto bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center mb-8 border border-white/20 shadow-2xl">
+                  <svg class="w-24 h-24 text-kosovo-gold" viewBox="0 0 100 100" fill="currentColor">
+                    <path d="M50 5C50 5 25 25 25 45C25 52 28 58 33 62L20 80H25V95H75V80H80L67 62C72 58 75 52 75 45C75 25 50 5 50 5ZM50 20C50 20 60 32 60 45C60 50.5 55.5 55 50 55C44.5 55 40 50.5 40 45C40 32 50 20 50 20ZM35 82H65V90H35V82Z"/>
+                  </svg>
+                </div>
+                <p class="text-white/60 text-sm uppercase tracking-widest mb-2">Est.</p>
+                <p class="text-kosovo-gold text-5xl font-bold mb-2">2014</p>
+                <p class="text-white text-xl font-medium">München</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating year badge -->
+          <div class="absolute -bottom-6 -right-6 lg:-right-10">
+            <div class="bg-gradient-to-br from-kosovo-gold to-kosovo-gold-dark text-white p-6 lg:p-8 rounded-2xl shadow-2xl shadow-kosovo-gold/30">
+              <div class="text-5xl lg:text-6xl font-black">10+</div>
+              <div class="text-sm lg:text-base opacity-90 font-medium">
+                {lang === 'de' ? 'Jahre' : lang === 'sq' ? 'Vite' : 'سنوات'}
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating member count -->
+          <div class="absolute -top-4 -left-4 lg:-left-8">
+            <div class="bg-white p-4 lg:p-5 rounded-2xl shadow-xl border border-gray-100">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-kosovo-blue/10 rounded-xl flex items-center justify-center">
+                  <span class="text-2xl">👥</span>
+                </div>
+                <div>
+                  <div class="text-2xl font-bold text-kosovo-blue">500+</div>
+                  <div class="text-xs text-gray-500">
+                    {lang === 'de' ? 'Mitglieder' : lang === 'sq' ? 'Anëtarë' : 'أعضاء'}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Floating badge -->
-        <div class="absolute -bottom-6 -right-6 bg-kosovo-gold text-white p-6 rounded-2xl shadow-xl">
-          <div class="text-4xl font-bold">10+</div>
-          <div class="text-sm opacity-90">Jahre</div>
+        <!-- Quick facts grid -->
+        <div class="grid grid-cols-2 gap-4 mt-12">
+          {facts.map((fact) => (
+            <div class="p-5 bg-gray-50 rounded-2xl hover:bg-kosovo-gold/10 transition-colors group border border-gray-100">
+              <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">{fact.icon}</div>
+              <div class="text-2xl font-bold text-kosovo-blue">{fact.number}</div>
+              <div class="text-sm text-gray-600">{fact.label}</div>
+            </div>
+          ))}
         </div>
       </div>
 
       <!-- Right: Content -->
-      <div>
-        <p class="text-lg text-gray-600 leading-relaxed mb-8">
-          {t.about.description}
-        </p>
-
-        <!-- Mission -->
-        <div class="bg-gradient-to-r from-kosovo-blue/5 to-transparent p-6 rounded-2xl mb-8 border-l-4 border-kosovo-blue">
-          <h3 class="text-xl font-bold text-kosovo-blue mb-3">{t.about.mission}</h3>
-          <p class="text-gray-600">{t.about.missionText}</p>
+      <div class="scroll-animate-right">
+        <!-- Mission Statement -->
+        <div class="mb-10">
+          <h3 class="text-2xl font-bold text-kosovo-blue mb-4 flex items-center gap-3">
+            <span class="w-10 h-10 bg-kosovo-blue/10 rounded-xl flex items-center justify-center text-xl">🎯</span>
+            {t.about.mission}
+          </h3>
+          <p class="text-lg text-gray-600 leading-relaxed">
+            {t.about.missionText}
+          </p>
         </div>
 
-        <!-- Values -->
-        <h3 class="text-xl font-bold text-kosovo-blue mb-6">{t.about.values}</h3>
-        <div class="grid grid-cols-2 gap-4">
-          {values.map((value) => (
-            <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-xl hover:bg-kosovo-gold/10 transition-colors group">
-              <span class="text-2xl group-hover:scale-110 transition-transform">{value.icon}</span>
-              <span class="font-medium text-gray-700">{value.title}</span>
+        <!-- Quote Card -->
+        <div class="bg-gradient-to-br from-kosovo-blue to-kosovo-blue-dark rounded-3xl p-8 mb-10 relative overflow-hidden shadow-xl">
+          <div class="absolute inset-0 islamic-pattern opacity-10"></div>
+          <div class="relative z-10">
+            <svg class="w-12 h-12 text-kosovo-gold/50 mb-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+            </svg>
+            <p class="text-white text-lg md:text-xl leading-relaxed mb-4 font-medium italic">
+              {quote.text}
+            </p>
+            <p class="text-kosovo-gold text-sm">
+              {quote.source}
+            </p>
+          </div>
+        </div>
+
+        <!-- Values Grid -->
+        <div>
+          <h3 class="text-2xl font-bold text-kosovo-blue mb-6 flex items-center gap-3">
+            <span class="w-10 h-10 bg-kosovo-gold/10 rounded-xl flex items-center justify-center text-xl">💎</span>
+            {t.about.values}
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            {values.map((value, index) => (
+              <div class="group p-5 bg-gray-50 rounded-2xl hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-kosovo-gold/20 cursor-default">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 bg-white group-hover:bg-kosovo-gold/10 rounded-xl flex items-center justify-center text-2xl shadow-sm group-hover:scale-110 transition-all flex-shrink-0">
+                    {value.icon}
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-gray-800 mb-1">{value.title}</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed">{value.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline Section -->
+    <div class="mb-20">
+      <div class="text-center mb-12">
+        <h3 class="text-3xl font-bold text-kosovo-blue mb-4">
+          {lang === 'de' ? 'Unsere Geschichte' : lang === 'sq' ? 'Historia jonë' : 'تاريخنا'}
+        </h3>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          {lang === 'de' ? 'Von einer kleinen Gruppe zu einer starken Gemeinschaft - unsere Reise durch die Jahre.' : lang === 'sq' ? 'Nga një grup i vogël në një bashkësi të fortë - udhëtimi ynë nëpër vite.' : 'من مجموعة صغيرة إلى مجتمع قوي - رحلتنا عبر السنين.'}
+        </p>
+      </div>
+
+      <!-- Timeline -->
+      <div class="relative">
+        <!-- Timeline line -->
+        <div class="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-kosovo-blue via-kosovo-gold to-kosovo-blue rounded-full hidden lg:block"></div>
+
+        <div class="space-y-8 lg:space-y-0">
+          {timeline.map((item, index) => (
+            <div class={`relative lg:flex items-center ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} scroll-animate`} style={`animation-delay: ${index * 0.1}s;`}>
+              <!-- Content -->
+              <div class={`lg:w-1/2 ${index % 2 === 0 ? 'lg:pr-12 lg:text-right' : 'lg:pl-12'}`}>
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl hover:border-kosovo-gold/20 transition-all group">
+                  <div class={`flex items-center gap-4 mb-3 ${index % 2 === 0 ? 'lg:flex-row-reverse' : ''}`}>
+                    <span class="text-3xl group-hover:scale-110 transition-transform">{item.icon}</span>
+                    <div>
+                      <span class="text-kosovo-gold font-bold text-lg">{item.year}</span>
+                      <h4 class="text-xl font-bold text-gray-800">{item.title}</h4>
+                    </div>
+                  </div>
+                  <p class="text-gray-600">{item.description}</p>
+                </div>
+              </div>
+
+              <!-- Timeline dot -->
+              <div class="hidden lg:flex absolute left-1/2 -translate-x-1/2 w-6 h-6 bg-white border-4 border-kosovo-gold rounded-full z-10 shadow-lg"></div>
+
+              <!-- Empty space for alternating layout -->
+              <div class="hidden lg:block lg:w-1/2"></div>
             </div>
           ))}
         </div>
       </div>
     </div>
+
+    <!-- CTA Section -->
+    <div class="text-center scroll-animate">
+      <div class="inline-flex flex-col sm:flex-row gap-4 items-center justify-center p-8 bg-gradient-to-r from-kosovo-blue/5 via-transparent to-kosovo-gold/5 rounded-3xl border border-gray-100">
+        <div class="text-left">
+          <h4 class="text-xl font-bold text-kosovo-blue mb-1">
+            {lang === 'de' ? 'Werden Sie Teil unserer Gemeinschaft!' : lang === 'sq' ? 'Bëhuni pjesë e bashkësisë sonë!' : 'كن جزءاً من مجتمعنا!'}
+          </h4>
+          <p class="text-gray-600">
+            {lang === 'de' ? 'Besuchen Sie uns oder nehmen Sie Kontakt auf.' : lang === 'sq' ? 'Na vizitoni ose na kontaktoni.' : 'زورونا أو تواصلوا معنا.'}
+          </p>
+        </div>
+        <a href="#contact" class="btn-primary whitespace-nowrap">
+          {lang === 'de' ? 'Kontakt aufnehmen' : lang === 'sq' ? 'Na kontaktoni' : 'تواصل معنا'}
+        </a>
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+  // Scroll animation observer
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right').forEach(el => {
+    observer.observe(el);
+  });
+</script>

@@ -1,0 +1,236 @@
+---
+import { translations } from '../i18n/translations';
+
+interface Props {
+  lang: keyof typeof translations;
+}
+
+const { lang } = Astro.props;
+
+const faqs = [
+  {
+    question: lang === 'de' ? 'Was sind die Öffnungszeiten der Moschee?' : lang === 'sq' ? 'Cilat janë oraret e hapjes së xhamisë?' : 'ما هي ساعات عمل المسجد؟',
+    answer: lang === 'de'
+      ? 'Die Moschee ist täglich zu allen fünf Gebetszeiten geöffnet. Der Gebetsraum öffnet etwa 30 Minuten vor jedem Gebet. Am Freitag öffnen wir um 12:30 Uhr für das Jummah-Gebet.'
+      : lang === 'sq'
+      ? 'Xhamia është e hapur çdo ditë për të pesë kohët e namazit. Dhoma e namazit hapet rreth 30 minuta para çdo namazi. Të premteve hapemi në orën 12:30 për namazin e xhumasë.'
+      : 'المسجد مفتوح يومياً لجميع الصلوات الخمس. تفتح قاعة الصلاة قبل حوالي 30 دقيقة من كل صلاة. يوم الجمعة نفتح الساعة 12:30 لصلاة الجمعة.',
+    category: 'general',
+  },
+  {
+    question: lang === 'de' ? 'Kann jeder die Moschee besuchen?' : lang === 'sq' ? 'A mund ta vizitojë kushdo xhaminë?' : 'هل يمكن لأي شخص زيارة المسجد؟',
+    answer: lang === 'de'
+      ? 'Ja, absolut! Jeder ist herzlich willkommen, unsere Moschee zu besuchen, unabhängig von Religion oder Herkunft. Wir bitten nur darum, die Gebetszeiten zu respektieren und angemessene Kleidung zu tragen.'
+      : lang === 'sq'
+      ? 'Po, absolutisht! Të gjithë janë të mirëseardhur të vizitojnë xhaminë tonë, pavarësisht nga feja apo prejardhja. Kërkojmë vetëm që të respektohen kohët e namazit dhe të visheni me veshje të përshtatshme.'
+      : 'نعم، بالتأكيد! الجميع مرحب بهم لزيارة مسجدنا، بغض النظر عن الدين أو الأصل. نطلب فقط احترام أوقات الصلاة وارتداء ملابس مناسبة.',
+    category: 'general',
+  },
+  {
+    question: lang === 'de' ? 'Wie kann ich mein Kind für die Koranschule anmelden?' : lang === 'sq' ? 'Si mund ta regjistro fëmijën tim në shkollën e Kuranit?' : 'كيف يمكنني تسجيل طفلي في مدرسة القرآن؟',
+    answer: lang === 'de'
+      ? 'Die Anmeldung zur Koranschule erfolgt persönlich in der Moschee oder über unser Kontaktformular. Der Unterricht findet samstags und sonntags von 10:00 bis 12:00 Uhr statt. Die Teilnahme ist kostenlos, eine Spende wird jedoch gerne angenommen.'
+      : lang === 'sq'
+      ? 'Regjistrimi në shkollën e Kuranit bëhet personalisht në xhami ose përmes formularit tonë të kontaktit. Mësimi mbahet të shtunave dhe të dielave nga ora 10:00 deri në 12:00. Pjesëmarrja është falas, por dhuratat pranohen me mirënjohje.'
+      : 'التسجيل في مدرسة القرآن يتم شخصياً في المسجد أو عبر نموذج الاتصال. تقام الدروس أيام السبت والأحد من 10:00 إلى 12:00. المشاركة مجانية، لكن التبرعات موضع ترحيب.',
+    category: 'education',
+  },
+  {
+    question: lang === 'de' ? 'Bieten Sie Arabischunterricht an?' : lang === 'sq' ? 'A ofroni mësim të arabishtes?' : 'هل تقدمون دروس اللغة العربية؟',
+    answer: lang === 'de'
+      ? 'Ja, wir bieten Arabischunterricht für Anfänger und Fortgeschrittene an. Der Fokus liegt auf dem Lesen des Korans und dem Verständnis der Gebete. Separate Kurse für Kinder und Erwachsene sind verfügbar.'
+      : lang === 'sq'
+      ? 'Po, ofrojmë mësim të arabishtes për fillestarë dhe të avancuar. Fokusi është në leximin e Kuranit dhe kuptimin e namazeve. Kurse të veçanta janë të disponueshme për fëmijë dhe të rritur.'
+      : 'نعم، نقدم دروساً في اللغة العربية للمبتدئين والمتقدمين. التركيز على قراءة القرآن وفهم الصلوات. تتوفر دورات منفصلة للأطفال والكبار.',
+    category: 'education',
+  },
+  {
+    question: lang === 'de' ? 'Wie kann ich spenden?' : lang === 'sq' ? 'Si mund të dhuroj?' : 'كيف يمكنني التبرع؟',
+    answer: lang === 'de'
+      ? 'Spenden können per Banküberweisung oder direkt in der Moschee abgegeben werden. Alle Spenden sind steuerlich absetzbar. Für größere Spenden oder Zakat-Zahlungen kontaktieren Sie uns bitte für eine Spendenquittung.'
+      : lang === 'sq'
+      ? 'Dhuratat mund të bëhen me transfertë bankare ose drejtpërdrejt në xhami. Të gjitha dhuratat janë të zbritshme nga taksat. Për dhurata më të mëdha ose pagesa të zekatit, na kontaktoni për një faturë dhurate.'
+      : 'يمكن التبرع عن طريق التحويل البنكي أو مباشرة في المسجد. جميع التبرعات معفاة من الضرائب. للتبرعات الكبيرة أو دفعات الزكاة، يرجى الاتصال بنا للحصول على إيصال.',
+    category: 'donation',
+  },
+  {
+    question: lang === 'de' ? 'Gibt es Parkmöglichkeiten?' : lang === 'sq' ? 'A ka mundësi parkimi?' : 'هل يوجد موقف سيارات؟',
+    answer: lang === 'de'
+      ? 'Begrenzte Parkplätze sind direkt vor der Moschee verfügbar. Wir empfehlen, öffentliche Verkehrsmittel zu nutzen oder in den umliegenden Straßen zu parken. Am Freitag kann es eng werden, bitte kommen Sie frühzeitig.'
+      : lang === 'sq'
+      ? 'Vende parkimi të kufizuara janë të disponueshme përpara xhamisë. Rekomandojmë përdorimin e transportit publik ose parkimin në rrugët përreth. Të premteve mund të jetë e ngarkuar, ju lutemi ejani herët.'
+      : 'تتوفر أماكن وقوف محدودة أمام المسجد. ننصح باستخدام وسائل النقل العام أو الوقوف في الشوارع المجاورة. يوم الجمعة قد يكون مزدحماً، يرجى الحضور مبكراً.',
+    category: 'general',
+  },
+  {
+    question: lang === 'de' ? 'Kann ich eine Hochzeit in der Moschee feiern?' : lang === 'sq' ? 'A mund të bëj dasmën në xhami?' : 'هل يمكنني إقامة حفل زفاف في المسجد؟',
+    answer: lang === 'de'
+      ? 'Ja, wir führen islamische Trauungen (Nikah) durch. Bitte kontaktieren Sie uns mindestens 4 Wochen im Voraus, um einen Termin zu vereinbaren und die erforderlichen Dokumente zu besprechen.'
+      : lang === 'sq'
+      ? 'Po, ne kryejmë martesa islame (Nikah). Ju lutemi na kontaktoni të paktën 4 javë përpara për të caktuar një takim dhe për të diskutuar dokumentet e nevojshme.'
+      : 'نعم، نقيم عقود الزواج الإسلامي (النكاح). يرجى الاتصال بنا قبل 4 أسابيع على الأقل لتحديد موعد ومناقشة المستندات المطلوبة.',
+    category: 'services',
+  },
+  {
+    question: lang === 'de' ? 'Bieten Sie Beratung und Seelsorge an?' : lang === 'sq' ? 'A ofroni këshillim dhe kujdes shpirtëror?' : 'هل تقدمون الإرشاد والرعاية الروحية؟',
+    answer: lang === 'de'
+      ? 'Ja, unser Imam steht für persönliche Beratung und islamische Seelsorge zur Verfügung. Termine können telefonisch oder per E-Mail vereinbart werden. Alle Gespräche werden vertraulich behandelt.'
+      : lang === 'sq'
+      ? 'Po, imami ynë është i disponueshëm për këshillim personal dhe kujdes shpirtëror islam. Takimet mund të caktohen me telefon ose email. Të gjitha bisedat trajtohen në mënyrë konfidenciale.'
+      : 'نعم، إمامنا متاح للإرشاد الشخصي والرعاية الروحية الإسلامية. يمكن تحديد المواعيد عبر الهاتف أو البريد الإلكتروني. جميع المحادثات سرية.',
+    category: 'services',
+  },
+];
+
+const categories = [
+  { id: 'all', label: lang === 'de' ? 'Alle' : lang === 'sq' ? 'Të gjitha' : 'الكل' },
+  { id: 'general', label: lang === 'de' ? 'Allgemein' : lang === 'sq' ? 'Të përgjithshme' : 'عام' },
+  { id: 'education', label: lang === 'de' ? 'Bildung' : lang === 'sq' ? 'Arsim' : 'تعليم' },
+  { id: 'services', label: lang === 'de' ? 'Dienste' : lang === 'sq' ? 'Shërbime' : 'خدمات' },
+  { id: 'donation', label: lang === 'de' ? 'Spenden' : lang === 'sq' ? 'Dhurata' : 'تبرعات' },
+];
+---
+
+<section id="faq" class="section-padding bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+  <!-- Decorative elements -->
+  <div class="absolute top-0 right-0 w-96 h-96 bg-kosovo-blue/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-96 h-96 bg-kosovo-gold/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <span class="badge-primary mb-4">
+        <span>❓</span>
+        <span>{lang === 'de' ? 'Fragen & Antworten' : lang === 'sq' ? 'Pyetje & Përgjigje' : 'أسئلة وأجوبة'}</span>
+      </span>
+      <h2 class="section-title">
+        {lang === 'de' ? 'Häufig gestellte Fragen' : lang === 'sq' ? 'Pyetjet e shpeshta' : 'الأسئلة الشائعة'}
+      </h2>
+      <p class="section-subtitle">
+        {lang === 'de' ? 'Finden Sie Antworten auf die häufigsten Fragen' : lang === 'sq' ? 'Gjeni përgjigje për pyetjet më të shpeshta' : 'اعثر على إجابات للأسئلة الأكثر شيوعاً'}
+      </p>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="flex flex-wrap justify-center gap-2 mb-12">
+      {categories.map((cat) => (
+        <button
+          class="faq-filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border-2 data-[active=true]:bg-kosovo-blue data-[active=true]:text-white data-[active=true]:border-kosovo-blue border-gray-200 text-gray-600 hover:border-kosovo-blue hover:text-kosovo-blue"
+          data-category={cat.id}
+          data-active={cat.id === 'all' ? 'true' : 'false'}
+        >
+          {cat.label}
+        </button>
+      ))}
+    </div>
+
+    <!-- FAQ Items -->
+    <div class="space-y-4" id="faq-list">
+      {faqs.map((faq, index) => (
+        <div
+          class="faq-item card hover:border-kosovo-gold/20 cursor-pointer group"
+          data-category={faq.category}
+        >
+          <button
+            class="w-full text-left flex items-start gap-4"
+            aria-expanded="false"
+          >
+            <div class="w-10 h-10 bg-kosovo-blue/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-kosovo-blue group-hover:text-white transition-colors">
+              <span class="faq-icon text-kosovo-blue group-hover:text-white transition-colors">+</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="text-lg font-semibold text-gray-800 group-hover:text-kosovo-blue transition-colors pr-4">
+                {faq.question}
+              </h3>
+            </div>
+          </button>
+
+          <div class="faq-answer hidden mt-4 pl-14 pr-4">
+            <p class="text-gray-600 leading-relaxed">
+              {faq.answer}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Contact CTA -->
+    <div class="text-center mt-16">
+      <div class="inline-flex flex-col items-center p-8 bg-white rounded-3xl shadow-xl border border-gray-100">
+        <div class="w-16 h-16 bg-kosovo-gold/10 rounded-2xl flex items-center justify-center mb-4">
+          <span class="text-3xl">💬</span>
+        </div>
+        <h4 class="text-xl font-bold text-gray-800 mb-2">
+          {lang === 'de' ? 'Noch Fragen?' : lang === 'sq' ? 'Keni pyetje të tjera?' : 'لديك أسئلة أخرى؟'}
+        </h4>
+        <p class="text-gray-600 mb-6 max-w-md">
+          {lang === 'de' ? 'Kontaktieren Sie uns direkt - wir helfen Ihnen gerne weiter.' : lang === 'sq' ? 'Na kontaktoni drejtpërdrejt - jemi të gatshëm t\'ju ndihmojmë.' : 'تواصل معنا مباشرة - يسعدنا مساعدتك.'}
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <a href="#contact" class="btn-primary">
+            {lang === 'de' ? 'Kontakt aufnehmen' : lang === 'sq' ? 'Na kontaktoni' : 'تواصل معنا'}
+          </a>
+          <a href="tel:+498912345678" class="btn-outline">
+            <span class="flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+              </svg>
+              {lang === 'de' ? 'Anrufen' : lang === 'sq' ? 'Thirr' : 'اتصل'}
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // FAQ Toggle
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const button = item.querySelector('button');
+    const answer = item.querySelector('.faq-answer');
+    const icon = item.querySelector('.faq-icon');
+
+    button?.addEventListener('click', () => {
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+      // Close all other FAQs
+      document.querySelectorAll('.faq-item').forEach(otherItem => {
+        if (otherItem !== item) {
+          otherItem.querySelector('button')?.setAttribute('aria-expanded', 'false');
+          otherItem.querySelector('.faq-answer')?.classList.add('hidden');
+          const otherIcon = otherItem.querySelector('.faq-icon');
+          if (otherIcon) otherIcon.textContent = '+';
+        }
+      });
+
+      // Toggle current FAQ
+      button.setAttribute('aria-expanded', (!isExpanded).toString());
+      answer?.classList.toggle('hidden');
+      if (icon) icon.textContent = isExpanded ? '+' : '−';
+    });
+  });
+
+  // Category Filter
+  document.querySelectorAll('.faq-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.getAttribute('data-category');
+
+      // Update active states
+      document.querySelectorAll('.faq-filter-btn').forEach(b => {
+        b.setAttribute('data-active', 'false');
+      });
+      btn.setAttribute('data-active', 'true');
+
+      // Filter FAQs
+      document.querySelectorAll('.faq-item').forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        if (category === 'all' || itemCategory === category) {
+          (item as HTMLElement).style.display = 'block';
+        } else {
+          (item as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

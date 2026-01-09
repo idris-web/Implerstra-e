@@ -7,76 +7,242 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = translations[lang];
+
+const stats = [
+  {
+    number: '10+',
+    label: lang === 'de' ? 'Jahre Erfahrung' : lang === 'sq' ? 'Vite përvojë' : 'سنوات خبرة',
+    icon: '🕌',
+    description: lang === 'de' ? 'Seit 2014 in München' : lang === 'sq' ? 'Që nga 2014 në Mynih' : 'منذ 2014 في ميونخ'
+  },
+  {
+    number: '500+',
+    label: lang === 'de' ? 'Gemeindemitglieder' : lang === 'sq' ? 'Anëtarë' : 'أعضاء',
+    icon: '👥',
+    description: lang === 'de' ? 'Aktive Familien' : lang === 'sq' ? 'Familje aktive' : 'عائلات نشطة'
+  },
+  {
+    number: '50+',
+    label: lang === 'de' ? 'Kinder lernen Quran' : lang === 'sq' ? 'Fëmijë mësojnë Kuran' : 'أطفال يتعلمون القرآن',
+    icon: '📖',
+    description: lang === 'de' ? 'In unserer Koranschule' : lang === 'sq' ? 'Në shkollën e Kuranit' : 'في مدرسة القرآن'
+  },
+  {
+    number: '365',
+    label: lang === 'de' ? 'Tage geöffnet' : lang === 'sq' ? 'Ditë të hapura' : 'يوم مفتوح',
+    icon: '🗓️',
+    description: lang === 'de' ? 'Jeden Tag für Sie da' : lang === 'sq' ? 'Çdo ditë për ju' : 'كل يوم من أجلك'
+  },
+];
+
+const features = [
+  { icon: '🕌', text: lang === 'de' ? '5 tägliche Gebete' : lang === 'sq' ? '5 namaze ditore' : '5 صلوات يومية' },
+  { icon: '📚', text: lang === 'de' ? 'Koranunterricht' : lang === 'sq' ? 'Mësim i Kuranit' : 'تعليم القرآن' },
+  { icon: '👶', text: lang === 'de' ? 'Kinderprogramme' : lang === 'sq' ? 'Programe për fëmijë' : 'برامج للأطفال' },
+  { icon: '🤝', text: lang === 'de' ? 'Gemeinschaftsevents' : lang === 'sq' ? 'Ngjarje të bashkësisë' : 'فعاليات مجتمعية' },
+];
 ---
 
 <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-  <!-- Background with gradient -->
-  <div class="absolute inset-0 gradient-bg"></div>
+  <!-- Animated gradient background -->
+  <div class="absolute inset-0 bg-gradient-to-br from-kosovo-blue via-kosovo-blue-dark to-[#0a1f4a] animate-gradient-x"></div>
 
-  <!-- Islamic Pattern Overlay -->
-  <div class="absolute inset-0 islamic-pattern opacity-30"></div>
-
-  <!-- Decorative Elements -->
-  <div class="absolute top-20 left-10 w-72 h-72 bg-kosovo-gold/20 rounded-full blur-3xl"></div>
-  <div class="absolute bottom-20 right-10 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-
-  <!-- Stars decoration (Kosovo flag inspired) -->
+  <!-- Floating geometric shapes -->
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
-    <div class="absolute top-1/4 left-1/4 text-kosovo-gold text-4xl opacity-20">★</div>
-    <div class="absolute top-1/3 right-1/3 text-kosovo-gold text-3xl opacity-15">★</div>
-    <div class="absolute bottom-1/3 left-1/3 text-kosovo-gold text-5xl opacity-20">★</div>
-    <div class="absolute top-1/2 right-1/4 text-kosovo-gold text-3xl opacity-15">★</div>
-    <div class="absolute bottom-1/4 right-1/2 text-kosovo-gold text-4xl opacity-20">★</div>
-    <div class="absolute top-2/3 left-1/5 text-kosovo-gold text-3xl opacity-15">★</div>
-  </div>
+    <!-- Large blurred circles with animation -->
+    <div class="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-kosovo-gold/15 rounded-full blur-3xl animate-float" style="animation-duration: 8s;"></div>
+    <div class="absolute bottom-1/4 -right-32 w-[600px] h-[600px] bg-white/5 rounded-full blur-3xl animate-float" style="animation-duration: 12s; animation-delay: 2s;"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-kosovo-blue-light/10 rounded-full blur-3xl"></div>
+    <div class="absolute top-3/4 left-1/4 w-72 h-72 bg-kosovo-gold/10 rounded-full blur-2xl animate-float" style="animation-duration: 10s; animation-delay: 4s;"></div>
 
-  <!-- Content -->
-  <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
-    <!-- Mosque Icon -->
-    <div class="mb-8 inline-block">
-      <div class="w-24 h-24 mx-auto bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20">
-        <svg class="w-14 h-14 text-kosovo-gold" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C12 2 8 6 8 10C8 11.1 8.45 12.1 9.17 12.83L7 15H6V22H18V15H17L14.83 12.83C15.55 12.1 16 11.1 16 10C16 6 12 2 12 2ZM12 4.5C12 4.5 14 7 14 10C14 11.1 13.1 12 12 12C10.9 12 10 11.1 10 10C10 7 12 4.5 12 4.5ZM8 17H16V20H8V17Z"/>
-        </svg>
+    <!-- Animated stars (Kosovo flag inspired) - 6 stars like the flag -->
+    <div class="star-field">
+      <div class="absolute top-[12%] left-[18%] text-kosovo-gold opacity-60 animate-pulse" style="animation-duration: 2s;">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+      </div>
+      <div class="absolute top-[18%] left-[32%] text-kosovo-gold opacity-80 animate-pulse" style="animation-duration: 2.5s; animation-delay: 0.3s;">
+        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+      </div>
+      <div class="absolute top-[10%] left-[48%] text-kosovo-gold opacity-70 animate-pulse" style="animation-duration: 3s; animation-delay: 0.6s;">
+        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+      </div>
+      <div class="absolute top-[15%] right-[32%] text-kosovo-gold opacity-75 animate-pulse" style="animation-duration: 2.8s; animation-delay: 0.9s;">
+        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+      </div>
+      <div class="absolute top-[20%] right-[22%] text-kosovo-gold opacity-65 animate-pulse" style="animation-duration: 2.2s; animation-delay: 1.2s;">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+      </div>
+      <div class="absolute top-[8%] right-[42%] text-kosovo-gold opacity-55 animate-pulse" style="animation-duration: 3.2s; animation-delay: 1.5s;">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
       </div>
     </div>
 
-    <!-- Title -->
-    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-4 tracking-tight">
-      {t.hero.title}
+    <!-- Islamic geometric patterns -->
+    <div class="absolute inset-0 islamic-pattern opacity-[0.02]"></div>
+
+    <!-- Floating mosque silhouettes -->
+    <svg class="absolute bottom-0 left-0 w-full h-64 text-black/20" viewBox="0 0 1440 250" preserveAspectRatio="none">
+      <path fill="currentColor" d="M0,250 L0,180 Q30,140 60,180 L60,150 Q80,100 100,150 L100,180 Q130,140 160,180 L160,250 Z M200,250 L200,160 Q250,80 300,160 L300,120 Q320,60 340,120 L340,160 Q390,80 440,160 L440,250 Z M500,250 L500,190 Q540,150 580,190 L580,250 Z M650,250 L650,140 Q720,50 790,140 L790,100 Q820,30 850,100 L850,140 Q920,50 990,140 L990,250 Z M1050,250 L1050,180 Q1100,130 1150,180 L1150,250 Z M1200,250 L1200,160 Q1260,70 1320,160 L1320,120 Q1350,50 1380,120 L1380,160 Q1410,100 1440,160 L1440,250 Z"/>
+    </svg>
+
+    <!-- Additional decorative elements -->
+    <div class="absolute top-1/3 left-[10%] w-1 h-32 bg-gradient-to-b from-transparent via-kosovo-gold/30 to-transparent rounded-full"></div>
+    <div class="absolute top-1/2 right-[15%] w-1 h-24 bg-gradient-to-b from-transparent via-white/20 to-transparent rounded-full"></div>
+  </div>
+
+  <!-- Main content -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
+    <!-- Bismillah -->
+    <div class="mb-8 slide-down" style="animation-delay: 0.1s;">
+      <span class="inline-block px-8 py-3 glass rounded-full text-kosovo-gold font-arabic text-xl md:text-2xl border border-kosovo-gold/20 shadow-lg shadow-kosovo-gold/10">
+        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+      </span>
+    </div>
+
+    <!-- Logo/Icon with glow effect -->
+    <div class="mb-10 slide-up" style="animation-delay: 0.2s;">
+      <div class="relative w-36 h-36 md:w-44 md:h-44 mx-auto">
+        <!-- Outer glow ring -->
+        <div class="absolute inset-0 bg-gradient-to-br from-kosovo-gold to-kosovo-gold-light rounded-full animate-pulse-glow opacity-50 blur-xl scale-110"></div>
+        <!-- Rotating border -->
+        <div class="absolute inset-[-4px] rounded-full bg-gradient-to-r from-kosovo-gold via-transparent to-kosovo-gold animate-spin-slow opacity-30"></div>
+        <!-- Main icon container -->
+        <div class="relative w-full h-full glass rounded-full flex items-center justify-center border-2 border-kosovo-gold/40 shadow-2xl">
+          <svg class="w-20 h-20 md:w-24 md:h-24 text-kosovo-gold" viewBox="0 0 100 100" fill="currentColor">
+            <path d="M50 5C50 5 25 25 25 45C25 52 28 58 33 62L20 80H25V95H75V80H80L67 62C72 58 75 52 75 45C75 25 50 5 50 5ZM50 20C50 20 60 32 60 45C60 50.5 55.5 55 50 55C44.5 55 40 50.5 40 45C40 32 50 20 50 20ZM35 82H65V90H35V82Z"/>
+            <circle cx="50" cy="12" r="4" class="animate-pulse"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Title -->
+    <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-6 tracking-tight slide-up" style="animation-delay: 0.3s;">
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-kosovo-gold drop-shadow-2xl">
+        {t.hero.title}
+      </span>
     </h1>
 
     <!-- Subtitle -->
-    <p class="text-xl md:text-2xl lg:text-3xl text-kosovo-gold font-medium mb-6">
-      {t.hero.subtitle}
-    </p>
+    <div class="overflow-hidden mb-6 slide-up" style="animation-delay: 0.4s;">
+      <p class="text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-kosovo-gold font-semibold tracking-wide">
+        {t.hero.subtitle}
+      </p>
+    </div>
+
+    <!-- Decorative divider -->
+    <div class="flex items-center justify-center gap-4 mb-8 slide-up" style="animation-delay: 0.5s;">
+      <div class="h-px w-12 md:w-24 bg-gradient-to-r from-transparent to-kosovo-gold/60"></div>
+      <div class="flex items-center gap-2">
+        <div class="w-1.5 h-1.5 bg-kosovo-gold rounded-full animate-pulse"></div>
+        <svg class="w-6 h-6 text-kosovo-gold/80" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/>
+        </svg>
+        <div class="w-1.5 h-1.5 bg-kosovo-gold rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+      </div>
+      <div class="h-px w-12 md:w-24 bg-gradient-to-l from-transparent to-kosovo-gold/60"></div>
+    </div>
 
     <!-- Description -->
-    <p class="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10">
+    <p class="text-lg md:text-xl lg:text-2xl text-white/80 max-w-4xl mx-auto mb-10 leading-relaxed slide-up" style="animation-delay: 0.6s;">
       {t.hero.description}
     </p>
 
+    <!-- Feature pills -->
+    <div class="flex flex-wrap justify-center gap-3 mb-12 slide-up" style="animation-delay: 0.65s;">
+      {features.map((feature, i) => (
+        <span class="inline-flex items-center gap-2 px-4 py-2 glass rounded-full text-white/90 text-sm md:text-base border border-white/10 hover:bg-white/10 transition-colors cursor-default">
+          <span>{feature.icon}</span>
+          <span>{feature.text}</span>
+        </span>
+      ))}
+    </div>
+
     <!-- CTA Buttons -->
-    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-      <a href="#donate" class="btn-primary text-lg px-10 py-4 inline-flex items-center gap-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-        </svg>
-        {t.hero.cta}
+    <div class="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center mb-20 slide-up" style="animation-delay: 0.7s;">
+      <a href="#donate" class="group relative overflow-hidden bg-gradient-to-r from-kosovo-gold to-kosovo-gold-light text-white font-bold py-4 md:py-5 px-10 md:px-14 rounded-full shadow-lg shadow-kosovo-gold/30 transition-all duration-500 hover:shadow-2xl hover:shadow-kosovo-gold/50 hover:scale-105 text-lg">
+        <span class="relative z-10 flex items-center gap-3">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+          </svg>
+          {t.hero.cta}
+        </span>
+        <div class="absolute inset-0 bg-gradient-to-r from-kosovo-gold-light to-kosovo-gold opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <!-- Shine effect -->
+        <div class="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
       </a>
-      <a href="#about" class="btn-outline border-white text-white hover:bg-white hover:text-kosovo-blue text-lg px-10 py-4 inline-flex items-center gap-2">
-        {t.hero.learnMore}
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-        </svg>
+
+      <a href="#about" class="group relative overflow-hidden border-2 border-white/40 text-white font-bold py-4 md:py-5 px-10 md:px-14 rounded-full backdrop-blur-md transition-all duration-500 hover:border-white hover:bg-white/10 hover:scale-105 text-lg">
+        <span class="flex items-center gap-3">
+          {t.hero.learnMore}
+          <svg class="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </span>
       </a>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto slide-up" style="animation-delay: 0.8s;">
+      {stats.map((stat, index) => (
+        <div class="group relative p-6 md:p-8 glass rounded-2xl md:rounded-3xl border border-white/10 hover:bg-white/10 hover:border-kosovo-gold/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-kosovo-gold/10 cursor-default overflow-hidden">
+          <!-- Background glow on hover -->
+          <div class="absolute inset-0 bg-gradient-to-br from-kosovo-gold/0 to-kosovo-gold/0 group-hover:from-kosovo-gold/5 group-hover:to-transparent transition-all duration-500 rounded-2xl md:rounded-3xl"></div>
+
+          <div class="relative z-10">
+            <div class="text-3xl md:text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">{stat.icon}</div>
+            <div class="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-1 counter">{stat.number}</div>
+            <div class="text-sm md:text-base font-semibold text-kosovo-gold mb-1">{stat.label}</div>
+            <div class="text-xs text-white/50 hidden md:block">{stat.description}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Floating next prayer card -->
+  <div class="absolute top-28 right-4 lg:right-8 glass rounded-2xl p-4 md:p-5 border border-white/20 shadow-2xl slide-left hidden lg:block max-w-xs">
+    <div class="flex items-center gap-4">
+      <div class="w-14 h-14 bg-gradient-to-br from-kosovo-gold/30 to-kosovo-gold/10 rounded-xl flex items-center justify-center">
+        <svg class="w-7 h-7 text-kosovo-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <div>
+        <p class="text-white/60 text-xs uppercase tracking-wider">{lang === 'de' ? 'Nächstes Gebet' : lang === 'sq' ? 'Namazi i radhës' : 'الصلاة القادمة'}</p>
+        <p class="text-white font-bold text-lg">Maghrib</p>
+        <p class="text-kosovo-gold font-semibold">17:15 Uhr</p>
+      </div>
+    </div>
+    <div class="mt-3 pt-3 border-t border-white/10">
+      <div class="flex items-center justify-between text-xs">
+        <span class="text-white/50">{lang === 'de' ? 'Verbleibend' : lang === 'sq' ? 'Mbetur' : 'متبقي'}</span>
+        <span class="text-kosovo-gold font-mono font-bold">02:34:56</span>
+      </div>
+      <div class="mt-2 h-1.5 bg-white/10 rounded-full overflow-hidden">
+        <div class="h-full w-3/4 bg-gradient-to-r from-kosovo-gold to-kosovo-gold-light rounded-full"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Location badge -->
+  <div class="absolute top-28 left-4 lg:left-8 glass rounded-full px-5 py-3 border border-white/20 shadow-xl slide-right hidden lg:flex items-center gap-3">
+    <div class="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
+      <div class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></div>
+    </div>
+    <div>
+      <p class="text-white/60 text-xs">{lang === 'de' ? 'Standort' : lang === 'sq' ? 'Vendndodhja' : 'الموقع'}</p>
+      <p class="text-white font-semibold text-sm">München, Deutschland</p>
     </div>
   </div>
 
   <!-- Scroll indicator -->
-  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-    <svg class="w-8 h-8 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-    </svg>
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3">
+    <a href="#about" class="flex flex-col items-center gap-2 text-white/50 hover:text-white transition-colors group">
+      <span class="text-xs uppercase tracking-[0.2em] group-hover:tracking-[0.3em] transition-all">{lang === 'de' ? 'Mehr entdecken' : lang === 'sq' ? 'Zbulo më shumë' : 'اكتشف المزيد'}</span>
+      <div class="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-1 group-hover:border-white/50 transition-colors">
+        <div class="w-1.5 h-3 bg-white/50 rounded-full animate-bounce-soft group-hover:bg-kosovo-gold transition-colors"></div>
+      </div>
+    </a>
   </div>
 </section>

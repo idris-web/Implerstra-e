@@ -8,63 +8,284 @@ interface Props {
 const { lang } = Astro.props;
 const t = translations[lang];
 
-// Example prayer times (these would ideally come from an API)
 const prayerTimes = [
-  { name: t.prayer.fajr, time: '06:15', icon: '🌅' },
-  { name: t.prayer.sunrise, time: '07:45', icon: '☀️' },
-  { name: t.prayer.dhuhr, time: '12:30', icon: '🌤️' },
-  { name: t.prayer.asr, time: '15:00', icon: '⛅' },
-  { name: t.prayer.maghrib, time: '17:15', icon: '🌅' },
-  { name: t.prayer.isha, time: '18:45', icon: '🌙' },
+  { name: t.prayer.fajr, time: '06:15', arabicName: 'الفجر', icon: '🌅', gradient: 'from-indigo-500 to-purple-600' },
+  { name: t.prayer.sunrise, time: '07:45', arabicName: 'الشروق', icon: '☀️', gradient: 'from-orange-400 to-yellow-500' },
+  { name: t.prayer.dhuhr, time: '12:30', arabicName: 'الظهر', icon: '🌤️', gradient: 'from-yellow-400 to-amber-500' },
+  { name: t.prayer.asr, time: '15:00', arabicName: 'العصر', icon: '⛅', gradient: 'from-amber-500 to-orange-500' },
+  { name: t.prayer.maghrib, time: '17:15', arabicName: 'المغرب', icon: '🌅', gradient: 'from-orange-500 to-red-500', isNext: true },
+  { name: t.prayer.isha, time: '18:45', arabicName: 'العشاء', icon: '🌙', gradient: 'from-indigo-600 to-purple-700' },
+];
+
+const weeklySchedule = [
+  { day: lang === 'de' ? 'Montag' : lang === 'sq' ? 'E hënë' : 'الاثنين', fajr: '06:15', dhuhr: '12:30', asr: '15:00', maghrib: '17:15', isha: '18:45' },
+  { day: lang === 'de' ? 'Dienstag' : lang === 'sq' ? 'E martë' : 'الثلاثاء', fajr: '06:14', dhuhr: '12:30', asr: '15:01', maghrib: '17:16', isha: '18:46' },
+  { day: lang === 'de' ? 'Mittwoch' : lang === 'sq' ? 'E mërkurë' : 'الأربعاء', fajr: '06:13', dhuhr: '12:30', asr: '15:02', maghrib: '17:17', isha: '18:47' },
+  { day: lang === 'de' ? 'Donnerstag' : lang === 'sq' ? 'E enjte' : 'الخميس', fajr: '06:12', dhuhr: '12:30', asr: '15:03', maghrib: '17:18', isha: '18:48' },
+  { day: lang === 'de' ? 'Freitag' : lang === 'sq' ? 'E premte' : 'الجمعة', fajr: '06:11', dhuhr: '13:30', asr: '15:04', maghrib: '17:19', isha: '18:49', isJummah: true },
+  { day: lang === 'de' ? 'Samstag' : lang === 'sq' ? 'E shtunë' : 'السبت', fajr: '06:10', dhuhr: '12:30', asr: '15:05', maghrib: '17:20', isha: '18:50' },
+  { day: lang === 'de' ? 'Sonntag' : lang === 'sq' ? 'E diel' : 'الأحد', fajr: '06:09', dhuhr: '12:30', asr: '15:06', maghrib: '17:21', isha: '18:51' },
+];
+
+const islamicMonths = [
+  { name: lang === 'de' ? 'Muharram' : lang === 'sq' ? 'Muharrem' : 'محرم', current: false },
+  { name: lang === 'de' ? 'Safar' : lang === 'sq' ? 'Safer' : 'صفر', current: false },
+  { name: lang === 'de' ? 'Rabi al-Awwal' : lang === 'sq' ? 'Rebi-ul-Evvel' : 'ربيع الأول', current: true },
 ];
 ---
 
-<section id="prayer-times" class="py-20 md:py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+<section id="prayer-times" class="section-padding bg-gradient-to-b from-gray-50 via-white to-gray-50 relative overflow-hidden">
   <!-- Decorative elements -->
-  <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent"></div>
-  <div class="absolute -top-20 -right-20 w-80 h-80 bg-kosovo-gold/10 rounded-full blur-3xl"></div>
+  <div class="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-white to-transparent pointer-events-none"></div>
+  <div class="absolute -top-40 -right-40 w-96 h-96 bg-kosovo-gold/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-kosovo-blue/10 rounded-full blur-3xl pointer-events-none"></div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <!-- Section Header -->
     <div class="text-center mb-16">
-      <span class="inline-block px-4 py-2 bg-kosovo-gold/10 text-kosovo-gold-dark text-sm font-semibold rounded-full mb-4">
-        🕌 {t.prayer.subtitle}
+      <span class="badge-gold mb-4">
+        <span>🕌</span>
+        <span>{t.prayer.subtitle}</span>
       </span>
       <h2 class="section-title">{t.prayer.title}</h2>
+      <p class="section-subtitle">
+        {lang === 'de' ? 'Aktuelle Gebetszeiten für München - aktualisiert täglich' : lang === 'sq' ? 'Kohët aktuale të namazit për Mynih - përditësohen çdo ditë' : 'أوقات الصلاة الحالية لميونخ - تحديث يومي'}
+      </p>
     </div>
 
-    <!-- Prayer Times Grid -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
-      {prayerTimes.map((prayer) => (
-        <div class="card text-center group hover:bg-kosovo-blue hover:text-white">
-          <div class="text-3xl mb-3 group-hover:scale-125 transition-transform">{prayer.icon}</div>
-          <h3 class="font-semibold text-gray-700 group-hover:text-white mb-2">{prayer.name}</h3>
-          <p class="text-2xl font-bold text-kosovo-blue group-hover:text-kosovo-gold">{prayer.time}</p>
+    <!-- Current Date & Islamic Date -->
+    <div class="flex flex-wrap justify-center gap-4 mb-12">
+      <div class="px-6 py-3 bg-white rounded-full shadow-lg border border-gray-100 flex items-center gap-3">
+        <span class="text-2xl">📅</span>
+        <div>
+          <p class="text-xs text-gray-500 uppercase tracking-wider">{lang === 'de' ? 'Heute' : lang === 'sq' ? 'Sot' : 'اليوم'}</p>
+          <p class="font-semibold text-gray-800" id="gregorian-date">Donnerstag, 9. Januar 2025</p>
         </div>
-      ))}
-    </div>
-
-    <!-- Jummah Prayer Highlight -->
-    <div class="max-w-2xl mx-auto">
-      <div class="bg-gradient-to-r from-kosovo-blue to-kosovo-blue-dark rounded-3xl p-8 text-center text-white shadow-2xl relative overflow-hidden">
-        <!-- Pattern overlay -->
-        <div class="absolute inset-0 islamic-pattern opacity-10"></div>
-
-        <div class="relative z-10">
-          <div class="inline-block p-4 bg-white/10 rounded-2xl mb-4">
-            <svg class="w-12 h-12 text-kosovo-gold" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C12 2 8 6 8 10C8 11.1 8.45 12.1 9.17 12.83L7 15H6V22H18V15H17L14.83 12.83C15.55 12.1 16 11.1 16 10C16 6 12 2 12 2ZM12 4.5C12 4.5 14 7 14 10C14 11.1 13.1 12 12 12C10.9 12 10 11.1 10 10C10 7 12 4.5 12 4.5ZM8 17H16V20H8V17Z"/>
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold mb-2">{t.prayer.jummah}</h3>
-          <p class="text-4xl font-bold text-kosovo-gold">{t.prayer.jummahTime}</p>
+      </div>
+      <div class="px-6 py-3 bg-gradient-to-r from-kosovo-blue to-kosovo-blue-dark rounded-full shadow-lg flex items-center gap-3">
+        <span class="text-2xl">🌙</span>
+        <div>
+          <p class="text-xs text-white/70 uppercase tracking-wider">{lang === 'de' ? 'Islamisches Datum' : lang === 'sq' ? 'Data islame' : 'التاريخ الهجري'}</p>
+          <p class="font-semibold text-white" id="islamic-date">9. Rajab 1446</p>
         </div>
       </div>
     </div>
 
-    <!-- Note -->
-    <p class="text-center text-gray-500 text-sm mt-8">
-      * Die Gebetszeiten werden regelmäßig aktualisiert
-    </p>
+    <!-- Next Prayer Countdown Banner -->
+    <div class="max-w-4xl mx-auto mb-16">
+      <div class="relative bg-gradient-to-r from-kosovo-blue via-kosovo-blue-dark to-kosovo-blue rounded-3xl p-1 shadow-2xl shadow-kosovo-blue/20 overflow-hidden">
+        <!-- Animated border -->
+        <div class="absolute inset-0 bg-gradient-to-r from-kosovo-gold via-kosovo-gold-light to-kosovo-gold animate-gradient-x opacity-50"></div>
+
+        <div class="relative bg-gradient-to-r from-kosovo-blue via-kosovo-blue-dark to-kosovo-blue rounded-[22px] p-8 md:p-10">
+          <div class="absolute inset-0 islamic-pattern opacity-5"></div>
+
+          <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+              <p class="text-kosovo-gold/80 text-sm uppercase tracking-widest mb-2">
+                {lang === 'de' ? 'Nächstes Gebet' : lang === 'sq' ? 'Namazi i radhës' : 'الصلاة القادمة'}
+              </p>
+              <div class="flex items-center gap-4">
+                <span class="text-5xl">🌅</span>
+                <div>
+                  <h3 class="text-4xl md:text-5xl font-black text-white">Maghrib</h3>
+                  <p class="text-kosovo-gold text-2xl font-bold">17:15 Uhr</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <p class="text-white/60 text-sm mb-3">{lang === 'de' ? 'Verbleibende Zeit' : lang === 'sq' ? 'Koha e mbetur' : 'الوقت المتبقي'}</p>
+              <div class="flex items-center gap-3" id="countdown">
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 min-w-[80px]">
+                  <div class="text-4xl font-black text-white font-mono" id="hours">02</div>
+                  <div class="text-xs text-white/60 uppercase">{lang === 'de' ? 'Std' : lang === 'sq' ? 'Orë' : 'ساعة'}</div>
+                </div>
+                <span class="text-3xl text-kosovo-gold font-bold">:</span>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 min-w-[80px]">
+                  <div class="text-4xl font-black text-white font-mono" id="minutes">34</div>
+                  <div class="text-xs text-white/60 uppercase">{lang === 'de' ? 'Min' : lang === 'sq' ? 'Min' : 'دقيقة'}</div>
+                </div>
+                <span class="text-3xl text-kosovo-gold font-bold">:</span>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 min-w-[80px]">
+                  <div class="text-4xl font-black text-white font-mono" id="seconds">56</div>
+                  <div class="text-xs text-white/60 uppercase">{lang === 'de' ? 'Sek' : lang === 'sq' ? 'Sek' : 'ثانية'}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress bar -->
+          <div class="mt-8 relative">
+            <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-kosovo-gold to-kosovo-gold-light rounded-full transition-all duration-1000" style="width: 65%;" id="prayer-progress"></div>
+            </div>
+            <div class="flex justify-between mt-2 text-xs text-white/50">
+              <span>Asr 15:00</span>
+              <span>Maghrib 17:15</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prayer Times Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 mb-16">
+      {prayerTimes.map((prayer, index) => (
+        <div class={`group relative ${prayer.isNext ? 'scale-105 z-10' : ''}`}>
+          {prayer.isNext && (
+            <div class="absolute -inset-1 bg-gradient-to-r from-kosovo-gold to-kosovo-gold-light rounded-3xl blur opacity-50 animate-pulse"></div>
+          )}
+          <div class={`relative card text-center overflow-hidden ${prayer.isNext ? 'ring-2 ring-kosovo-gold shadow-2xl shadow-kosovo-gold/20' : ''}`}>
+            {/* Gradient header */}
+            <div class={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${prayer.gradient}`}></div>
+
+            {prayer.isNext && (
+              <div class="absolute top-3 right-3">
+                <span class="px-2 py-1 bg-kosovo-gold text-white text-xs font-bold rounded-full animate-pulse">
+                  {lang === 'de' ? 'NÄCHSTES' : lang === 'sq' ? 'RADHËS' : 'القادمة'}
+                </span>
+              </div>
+            )}
+
+            <div class="pt-4">
+              <div class="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">{prayer.icon}</div>
+              <p class="text-xs text-gray-400 font-arabic mb-1">{prayer.arabicName}</p>
+              <h3 class="font-bold text-gray-700 mb-3 text-lg">{prayer.name}</h3>
+              <p class={`text-3xl font-black ${prayer.isNext ? 'text-kosovo-gold' : 'text-kosovo-blue'}`}>{prayer.time}</p>
+            </div>
+
+            {/* Hover effect */}
+            <div class="absolute inset-0 bg-gradient-to-t from-kosovo-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Jummah Prayer Special Card -->
+    <div class="max-w-3xl mx-auto mb-16">
+      <div class="relative bg-gradient-to-br from-kosovo-blue via-kosovo-blue-dark to-[#0a1f4a] rounded-3xl overflow-hidden shadow-2xl">
+        {/* Decorative elements */}
+        <div class="absolute inset-0 islamic-pattern opacity-10"></div>
+        <div class="absolute top-0 right-0 w-64 h-64 bg-kosovo-gold/20 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 p-8 md:p-12">
+          <div class="flex flex-col md:flex-row items-center gap-8">
+            {/* Left: Icon and info */}
+            <div class="text-center md:text-left">
+              <div class="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl mb-4">
+                <svg class="w-12 h-12 text-kosovo-gold" viewBox="0 0 100 100" fill="currentColor">
+                  <path d="M50 5C50 5 25 25 25 45C25 52 28 58 33 62L20 80H25V95H75V80H80L67 62C72 58 75 52 75 45C75 25 50 5 50 5ZM50 20C50 20 60 32 60 45C60 50.5 55.5 55 50 55C44.5 55 40 50.5 40 45C40 32 50 20 50 20ZM35 82H65V90H35V82Z"/>
+                </svg>
+              </div>
+              <h3 class="text-3xl md:text-4xl font-black text-white mb-2">{t.prayer.jummah}</h3>
+              <p class="text-white/60">
+                {lang === 'de' ? 'Jeden Freitag' : lang === 'sq' ? 'Çdo të premte' : 'كل جمعة'}
+              </p>
+            </div>
+
+            {/* Right: Time and details */}
+            <div class="flex-1 text-center md:text-right">
+              <div class="inline-block bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8">
+                <p class="text-kosovo-gold text-sm uppercase tracking-widest mb-2">
+                  {lang === 'de' ? 'Beginn' : lang === 'sq' ? 'Fillimi' : 'البداية'}
+                </p>
+                <p class="text-5xl md:text-6xl font-black text-white">{t.prayer.jummahTime}</p>
+                <div class="mt-4 flex flex-wrap justify-center md:justify-end gap-2">
+                  <span class="px-3 py-1 bg-white/10 rounded-full text-white/80 text-sm">
+                    {lang === 'de' ? 'Khutba: 13:00' : lang === 'sq' ? 'Hutbe: 13:00' : 'الخطبة: 13:00'}
+                  </span>
+                  <span class="px-3 py-1 bg-white/10 rounded-full text-white/80 text-sm">
+                    {lang === 'de' ? 'Gebet: 13:30' : lang === 'sq' ? 'Namaz: 13:30' : 'الصلاة: 13:30'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Reminder */}
+          <div class="mt-8 pt-6 border-t border-white/10 flex flex-wrap items-center justify-center gap-4 text-sm">
+            <div class="flex items-center gap-2 text-white/70">
+              <span>📍</span>
+              <span>{lang === 'de' ? 'Gebetsraum öffnet um 12:30' : lang === 'sq' ? 'Dhoma e namazit hapet në 12:30' : 'تفتح قاعة الصلاة الساعة 12:30'}</span>
+            </div>
+            <div class="flex items-center gap-2 text-kosovo-gold">
+              <span>⚠️</span>
+              <span>{lang === 'de' ? 'Bitte früh kommen' : lang === 'sq' ? 'Ju lutemi ejani herët' : 'يرجى الحضور مبكراً'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Schedule Table -->
+    <div class="mb-16">
+      <h3 class="text-2xl font-bold text-center text-kosovo-blue mb-8">
+        {lang === 'de' ? 'Wochenübersicht' : lang === 'sq' ? 'Pasqyra javore' : 'جدول الأسبوع'}
+      </h3>
+
+      <div class="overflow-x-auto rounded-2xl border border-gray-200 shadow-lg">
+        <table class="w-full bg-white">
+          <thead>
+            <tr class="bg-gradient-to-r from-kosovo-blue to-kosovo-blue-dark text-white">
+              <th class="px-4 py-4 text-left font-semibold">{lang === 'de' ? 'Tag' : lang === 'sq' ? 'Dita' : 'اليوم'}</th>
+              <th class="px-4 py-4 text-center font-semibold">Fajr</th>
+              <th class="px-4 py-4 text-center font-semibold">Dhuhr</th>
+              <th class="px-4 py-4 text-center font-semibold">Asr</th>
+              <th class="px-4 py-4 text-center font-semibold">Maghrib</th>
+              <th class="px-4 py-4 text-center font-semibold">Isha</th>
+            </tr>
+          </thead>
+          <tbody>
+            {weeklySchedule.map((day, index) => (
+              <tr class={`border-b border-gray-100 ${day.isJummah ? 'bg-kosovo-gold/5' : index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-kosovo-blue/5 transition-colors`}>
+                <td class="px-4 py-4 font-semibold text-gray-800">
+                  <div class="flex items-center gap-2">
+                    {day.isJummah && <span class="text-kosovo-gold">🕌</span>}
+                    {day.day}
+                  </div>
+                </td>
+                <td class="px-4 py-4 text-center font-mono text-gray-600">{day.fajr}</td>
+                <td class={`px-4 py-4 text-center font-mono ${day.isJummah ? 'text-kosovo-gold font-bold' : 'text-gray-600'}`}>{day.dhuhr}</td>
+                <td class="px-4 py-4 text-center font-mono text-gray-600">{day.asr}</td>
+                <td class="px-4 py-4 text-center font-mono text-gray-600">{day.maghrib}</td>
+                <td class="px-4 py-4 text-center font-mono text-gray-600">{day.isha}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="text-center">
+      <div class="inline-flex items-center gap-3 px-6 py-4 bg-gray-100 rounded-full text-sm text-gray-600">
+        <span>ℹ️</span>
+        <span>
+          {lang === 'de' ? 'Die Gebetszeiten werden automatisch basierend auf dem Standort München berechnet.' : lang === 'sq' ? 'Kohët e namazit llogariten automatikisht bazuar në vendndodhjen e Mynihut.' : 'يتم حساب أوقات الصلاة تلقائياً بناءً على موقع ميونخ.'}
+        </span>
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+  // Simple countdown timer simulation
+  function updateCountdown() {
+    const now = new Date();
+    const seconds = 60 - now.getSeconds();
+    const minutes = 34; // Static for demo
+    const hours = 2; // Static for demo
+
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    if (hoursEl && minutesEl && secondsEl) {
+      secondsEl.textContent = seconds.toString().padStart(2, '0');
+    }
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+</script>

@@ -8,7 +8,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = translations[lang];
 
-const events = [
+const regularEvents = [
   {
     title: t.events.quranSchool,
     description: t.events.quranSchoolDesc,
@@ -16,6 +16,10 @@ const events = [
     icon: '📖',
     color: 'from-emerald-500 to-emerald-600',
     schedule: lang === 'de' ? 'Samstag & Sonntag' : lang === 'sq' ? 'E shtunë & E diel' : 'السبت والأحد',
+    time: '10:00 - 12:00',
+    ageGroup: lang === 'de' ? '6-14 Jahre' : lang === 'sq' ? '6-14 vjeç' : '6-14 سنة',
+    spots: 50,
+    enrolled: 42,
   },
   {
     title: t.events.kidsPlay,
@@ -24,6 +28,10 @@ const events = [
     icon: '👶',
     color: 'from-blue-500 to-blue-600',
     schedule: lang === 'de' ? 'Mittwoch & Freitag' : lang === 'sq' ? 'E mërkurë & E premte' : 'الأربعاء والجمعة',
+    time: '15:00 - 17:00',
+    ageGroup: lang === 'de' ? '3-8 Jahre' : lang === 'sq' ? '3-8 vjeç' : '3-8 سنة',
+    spots: 30,
+    enrolled: 28,
   },
   {
     title: t.events.dailyReading,
@@ -32,58 +40,269 @@ const events = [
     icon: '🌙',
     color: 'from-kosovo-blue to-kosovo-blue-dark',
     schedule: lang === 'de' ? 'Jeden Abend nach Isha' : lang === 'sq' ? 'Çdo mbrëmje pas Jacisë' : 'كل مساء بعد العشاء',
+    time: '19:00 - 20:00',
+    ageGroup: lang === 'de' ? 'Alle Altersgruppen' : lang === 'sq' ? 'Të gjitha moshat' : 'جميع الأعمار',
+    spots: null,
+    enrolled: null,
+  },
+  {
+    title: lang === 'de' ? 'Jugendtreff' : lang === 'sq' ? 'Takimi i të rinjve' : 'لقاء الشباب',
+    description: lang === 'de' ? 'Wöchentliches Treffen für Jugendliche mit Diskussionen, Sport und Gemeinschaft.' : lang === 'sq' ? 'Takim javor për të rinjtë me diskutime, sport dhe bashkësi.' : 'لقاء أسبوعي للشباب مع مناقشات ورياضة ومجتمع.',
+    frequency: t.events.weekly,
+    icon: '⚽',
+    color: 'from-orange-500 to-red-500',
+    schedule: lang === 'de' ? 'Sonntag' : lang === 'sq' ? 'E diel' : 'الأحد',
+    time: '14:00 - 17:00',
+    ageGroup: lang === 'de' ? '13-20 Jahre' : lang === 'sq' ? '13-20 vjeç' : '13-20 سنة',
+    spots: 40,
+    enrolled: 35,
+  },
+  {
+    title: lang === 'de' ? 'Frauentreffen' : lang === 'sq' ? 'Takimi i grave' : 'لقاء النساء',
+    description: lang === 'de' ? 'Gemeinschaftstreffen für Frauen mit islamischen Vorträgen und gemeinsamem Lernen.' : lang === 'sq' ? 'Takim i bashkësisë për gratë me ligjërata islame dhe mësim të përbashkët.' : 'لقاء مجتمعي للنساء مع محاضرات إسلامية وتعلم مشترك.',
+    frequency: t.events.weekly,
+    icon: '👩',
+    color: 'from-pink-500 to-rose-500',
+    schedule: lang === 'de' ? 'Donnerstag' : lang === 'sq' ? 'E enjte' : 'الخميس',
+    time: '10:00 - 12:00',
+    ageGroup: lang === 'de' ? 'Frauen' : lang === 'sq' ? 'Gratë' : 'النساء',
+    spots: 35,
+    enrolled: 30,
+  },
+  {
+    title: lang === 'de' ? 'Islamischer Vortrag' : lang === 'sq' ? 'Ligjërata islame' : 'محاضرة إسلامية',
+    description: lang === 'de' ? 'Wöchentlicher Vortrag zu verschiedenen islamischen Themen mit anschließender Diskussion.' : lang === 'sq' ? 'Ligjëratë javore për tema të ndryshme islame me diskutim pas saj.' : 'محاضرة أسبوعية في مواضيع إسلامية متنوعة مع نقاش.',
+    frequency: t.events.weekly,
+    icon: '🎤',
+    color: 'from-purple-500 to-indigo-500',
+    schedule: lang === 'de' ? 'Samstag nach Maghrib' : lang === 'sq' ? 'E shtunë pas Akshamit' : 'السبت بعد المغرب',
+    time: '18:00 - 19:30',
+    ageGroup: lang === 'de' ? 'Alle Altersgruppen' : lang === 'sq' ? 'Të gjitha moshat' : 'جميع الأعمار',
+    spots: null,
+    enrolled: null,
   },
 ];
+
+const upcomingSpecialEvents = [
+  {
+    date: '25',
+    month: lang === 'de' ? 'Jan' : lang === 'sq' ? 'Jan' : 'يناير',
+    year: '2025',
+    title: lang === 'de' ? 'Koranwettbewerb für Kinder' : lang === 'sq' ? 'Konkursi i Kuranit për fëmijë' : 'مسابقة القرآن للأطفال',
+    time: '14:00 - 18:00',
+    description: lang === 'de' ? 'Jährlicher Wettbewerb mit Preisen' : lang === 'sq' ? 'Konkurs vjetor me çmime' : 'مسابقة سنوية مع جوائز',
+    category: lang === 'de' ? 'Wettbewerb' : lang === 'sq' ? 'Konkurs' : 'مسابقة',
+    categoryColor: 'bg-yellow-100 text-yellow-700',
+  },
+  {
+    date: '14',
+    month: lang === 'de' ? 'Feb' : lang === 'sq' ? 'Shk' : 'فبراير',
+    year: '2025',
+    title: lang === 'de' ? 'Tag der offenen Moschee' : lang === 'sq' ? 'Dita e xhamisë së hapur' : 'يوم المسجد المفتوح',
+    time: '11:00 - 17:00',
+    description: lang === 'de' ? 'Einladung an Nachbarn und Interessierte' : lang === 'sq' ? 'Ftesë për fqinjët dhe të interesuarit' : 'دعوة للجيران والمهتمين',
+    category: lang === 'de' ? 'Gemeinschaft' : lang === 'sq' ? 'Bashkësi' : 'مجتمع',
+    categoryColor: 'bg-blue-100 text-blue-700',
+  },
+  {
+    date: '01',
+    month: lang === 'de' ? 'Mär' : lang === 'sq' ? 'Mar' : 'مارس',
+    year: '2025',
+    title: lang === 'de' ? 'Ramadan Beginn (voraussichtlich)' : lang === 'sq' ? 'Fillimi i Ramazanit (rreth)' : 'بداية رمضان (تقريباً)',
+    time: lang === 'de' ? 'Nach Mondbeobachtung' : lang === 'sq' ? 'Pas vëzhgimit të hënës' : 'بعد رؤية الهلال',
+    description: lang === 'de' ? 'Iftar & Tarawih jeden Abend' : lang === 'sq' ? 'Iftar & Teravija çdo mbrëmje' : 'إفطار وتراويح كل مساء',
+    category: 'Ramadan',
+    categoryColor: 'bg-green-100 text-green-700',
+  },
+];
+
+const weekDays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+const weekDaysSq = ['Hë', 'Ma', 'Më', 'En', 'Pr', 'Sh', 'Di'];
+const weekDaysAr = ['إث', 'ثل', 'أر', 'خم', 'جم', 'سب', 'أح'];
+
+const currentWeekDays = lang === 'de' ? weekDays : lang === 'sq' ? weekDaysSq : weekDaysAr;
 ---
 
-<section id="events" class="py-20 md:py-32 bg-white relative overflow-hidden">
-  <!-- Decorative -->
-  <div class="absolute bottom-0 right-0 w-96 h-96 bg-kosovo-blue/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+<section id="events" class="section-padding bg-white relative overflow-hidden">
+  <!-- Decorative elements -->
+  <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-kosovo-blue/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
+  <div class="absolute top-0 left-0 w-[400px] h-[400px] bg-kosovo-gold/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <!-- Section Header -->
     <div class="text-center mb-16">
-      <span class="inline-block px-4 py-2 bg-kosovo-blue/10 text-kosovo-blue text-sm font-semibold rounded-full mb-4">
-        📅 {t.events.subtitle}
+      <span class="badge-primary mb-4">
+        <span>📅</span>
+        <span>{t.events.subtitle}</span>
       </span>
       <h2 class="section-title">{t.events.title}</h2>
+      <p class="section-subtitle">
+        {lang === 'de' ? 'Vielfältige Programme für die ganze Familie' : lang === 'sq' ? 'Programe të ndryshme për të gjithë familjen' : 'برامج متنوعة لجميع أفراد الأسرة'}
+      </p>
     </div>
 
-    <!-- Events Grid -->
-    <div class="grid md:grid-cols-3 gap-8">
-      {events.map((event, index) => (
-        <div class="card group hover:shadow-2xl border border-gray-100" style={`animation-delay: ${index * 0.1}s`}>
-          <!-- Icon Header -->
-          <div class={`bg-gradient-to-r ${event.color} w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
-            {event.icon}
-          </div>
+    <!-- Upcoming Special Events -->
+    <div class="mb-20">
+      <h3 class="text-2xl font-bold text-kosovo-blue mb-8 text-center">
+        {lang === 'de' ? 'Kommende Veranstaltungen' : lang === 'sq' ? 'Ngjarjet e ardhshme' : 'الفعاليات القادمة'}
+      </h3>
 
-          <!-- Content -->
-          <h3 class="text-xl font-bold text-gray-800 mb-3">{event.title}</h3>
-          <p class="text-gray-600 mb-6 leading-relaxed">{event.description}</p>
+      <div class="grid md:grid-cols-3 gap-6">
+        {upcomingSpecialEvents.map((event, index) => (
+          <div class="group card hover:border-kosovo-gold/20 overflow-hidden">
+            <div class="flex gap-5">
+              {/* Date Block */}
+              <div class="flex-shrink-0">
+                <div class="w-20 h-24 bg-gradient-to-br from-kosovo-blue to-kosovo-blue-dark rounded-2xl flex flex-col items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform">
+                  <span class="text-3xl font-black">{event.date}</span>
+                  <span class="text-sm uppercase opacity-80">{event.month}</span>
+                  <span class="text-xs opacity-60">{event.year}</span>
+                </div>
+              </div>
 
-          <!-- Schedule Info -->
-          <div class="border-t pt-4 mt-auto">
-            <div class="flex items-center justify-between">
-              <span class="inline-flex items-center px-3 py-1 bg-kosovo-gold/10 text-kosovo-gold-dark text-sm font-medium rounded-full">
-                {event.frequency}
-              </span>
-              <span class="text-sm text-gray-500">{event.schedule}</span>
+              {/* Content */}
+              <div class="flex-1 min-w-0">
+                <span class={`inline-block px-2 py-1 rounded-full text-xs font-semibold mb-2 ${event.categoryColor}`}>
+                  {event.category}
+                </span>
+                <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-kosovo-blue transition-colors truncate">
+                  {event.title}
+                </h4>
+                <p class="text-sm text-gray-500 mb-2">{event.time}</p>
+                <p class="text-sm text-gray-600">{event.description}</p>
+              </div>
             </div>
           </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Regular Events Grid -->
+    <div class="mb-16">
+      <h3 class="text-2xl font-bold text-kosovo-blue mb-8 text-center">
+        {lang === 'de' ? 'Regelmäßige Aktivitäten' : lang === 'sq' ? 'Aktivitetet e rregullta' : 'الأنشطة المنتظمة'}
+      </h3>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {regularEvents.map((event, index) => (
+          <div class="group card hover:border-kosovo-gold/20 flex flex-col">
+            {/* Header */}
+            <div class="flex items-start gap-4 mb-4">
+              <div class={`bg-gradient-to-br ${event.color} w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform flex-shrink-0`}>
+                {event.icon}
+              </div>
+              <div class="min-w-0">
+                <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-kosovo-blue transition-colors">
+                  {event.title}
+                </h4>
+                <span class="inline-flex items-center px-2 py-0.5 bg-kosovo-gold/10 text-kosovo-gold-dark text-xs font-medium rounded-full">
+                  {event.frequency}
+                </span>
+              </div>
+            </div>
+
+            {/* Description */}
+            <p class="text-gray-600 text-sm leading-relaxed mb-4 flex-1">
+              {event.description}
+            </p>
+
+            {/* Details */}
+            <div class="space-y-2 pt-4 border-t border-gray-100">
+              <div class="flex items-center gap-2 text-sm">
+                <span class="text-gray-400">📅</span>
+                <span class="text-gray-600">{event.schedule}</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm">
+                <span class="text-gray-400">🕐</span>
+                <span class="text-gray-600">{event.time}</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm">
+                <span class="text-gray-400">👥</span>
+                <span class="text-gray-600">{event.ageGroup}</span>
+              </div>
+
+              {/* Enrollment Status */}
+              {event.spots && (
+                <div class="pt-2">
+                  <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+                    <span>{lang === 'de' ? 'Anmeldungen' : lang === 'sq' ? 'Regjistrimet' : 'التسجيلات'}</span>
+                    <span class="font-semibold">{event.enrolled}/{event.spots}</span>
+                  </div>
+                  <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div
+                      class={`h-full rounded-full transition-all duration-500 ${event.enrolled && event.spots && event.enrolled / event.spots > 0.8 ? 'bg-red-400' : 'bg-gradient-to-r from-kosovo-gold to-kosovo-gold-light'}`}
+                      style={`width: ${event.spots ? (event.enrolled! / event.spots) * 100 : 0}%`}
+                    ></div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Weekly Overview Mini Calendar -->
+    <div class="max-w-4xl mx-auto mb-16">
+      <div class="card bg-gradient-to-br from-kosovo-blue/5 to-transparent">
+        <h4 class="text-xl font-bold text-kosovo-blue mb-6 text-center">
+          {lang === 'de' ? 'Wochenübersicht' : lang === 'sq' ? 'Pasqyra javore' : 'جدول الأسبوع'}
+        </h4>
+
+        <div class="grid grid-cols-7 gap-2">
+          {/* Headers */}
+          {currentWeekDays.map((day, i) => (
+            <div class={`text-center py-2 text-sm font-semibold ${i === 4 ? 'text-kosovo-gold' : 'text-gray-600'}`}>
+              {day}
+            </div>
+          ))}
+
+          {/* Day cells with events */}
+          {[
+            { events: [], highlight: false },
+            { events: [], highlight: false },
+            { events: ['👶'], highlight: false },
+            { events: ['👩'], highlight: false },
+            { events: ['👶', '🕌'], highlight: true },
+            { events: ['📖', '🎤'], highlight: false },
+            { events: ['📖', '⚽'], highlight: false },
+          ].map((day, i) => (
+            <div class={`text-center py-4 rounded-xl ${day.highlight ? 'bg-kosovo-gold/20 border-2 border-kosovo-gold/30' : 'bg-gray-50'}`}>
+              <div class="text-lg font-bold text-gray-800 mb-1">{9 + i}</div>
+              <div class="flex justify-center gap-1 flex-wrap">
+                {day.events.map((emoji) => (
+                  <span class="text-sm">{emoji}</span>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+
+        <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-500">
+          <span>📖 {lang === 'de' ? 'Koranschule' : lang === 'sq' ? 'Shkolla e Kuranit' : 'مدرسة القرآن'}</span>
+          <span>👶 {lang === 'de' ? 'Kindertreffen' : lang === 'sq' ? 'Takimi i fëmijëve' : 'لقاء الأطفال'}</span>
+          <span>⚽ {lang === 'de' ? 'Jugendtreff' : lang === 'sq' ? 'Takimi i të rinjve' : 'لقاء الشباب'}</span>
+          <span>👩 {lang === 'de' ? 'Frauentreffen' : lang === 'sq' ? 'Takimi i grave' : 'لقاء النساء'}</span>
+          <span>🎤 {lang === 'de' ? 'Vortrag' : lang === 'sq' ? 'Ligjëratë' : 'محاضرة'}</span>
+          <span>🕌 {lang === 'de' ? 'Jummah' : lang === 'sq' ? 'Xhuma' : 'الجمعة'}</span>
+        </div>
+      </div>
     </div>
 
     <!-- Call to Action -->
-    <div class="text-center mt-16">
-      <div class="inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-kosovo-blue/5 to-kosovo-gold/5 rounded-2xl border border-kosovo-blue/10">
-        <svg class="w-6 h-6 text-kosovo-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <span class="text-gray-700">
-          {lang === 'de' ? 'Alle sind herzlich willkommen!' : lang === 'sq' ? 'Të gjithë janë të mirëseardhur!' : 'الجميع مرحب بهم!'}
-        </span>
+    <div class="text-center">
+      <div class="inline-flex flex-col sm:flex-row gap-4 items-center p-8 bg-gradient-to-r from-kosovo-blue to-kosovo-blue-dark rounded-3xl text-white shadow-2xl">
+        <div class="text-center sm:text-left">
+          <h4 class="text-xl font-bold mb-2">
+            {lang === 'de' ? 'Möchten Sie teilnehmen?' : lang === 'sq' ? 'Dëshironi të merrni pjesë?' : 'هل تريد المشاركة؟'}
+          </h4>
+          <p class="text-white/80">
+            {lang === 'de' ? 'Alle unsere Programme sind kostenlos und offen für alle.' : lang === 'sq' ? 'Të gjitha programet tona janë falas dhe të hapura për të gjithë.' : 'جميع برامجنا مجانية ومفتوحة للجميع.'}
+          </p>
+        </div>
+        <a href="#contact" class="btn-primary bg-white text-kosovo-blue hover:bg-gray-100 whitespace-nowrap">
+          {lang === 'de' ? 'Kontaktieren Sie uns' : lang === 'sq' ? 'Na kontaktoni' : 'تواصل معنا'}
+        </a>
       </div>
     </div>
   </div>
