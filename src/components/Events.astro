@@ -1,0 +1,90 @@
+---
+import { translations } from '../i18n/translations';
+
+interface Props {
+  lang: keyof typeof translations;
+}
+
+const { lang } = Astro.props;
+const t = translations[lang];
+
+const events = [
+  {
+    title: t.events.quranSchool,
+    description: t.events.quranSchoolDesc,
+    frequency: t.events.weekly,
+    icon: '📖',
+    color: 'from-emerald-500 to-emerald-600',
+    schedule: lang === 'de' ? 'Samstag & Sonntag' : lang === 'sq' ? 'E shtunë & E diel' : 'السبت والأحد',
+  },
+  {
+    title: t.events.kidsPlay,
+    description: t.events.kidsPlayDesc,
+    frequency: t.events.biweekly,
+    icon: '👶',
+    color: 'from-blue-500 to-blue-600',
+    schedule: lang === 'de' ? 'Mittwoch & Freitag' : lang === 'sq' ? 'E mërkurë & E premte' : 'الأربعاء والجمعة',
+  },
+  {
+    title: t.events.dailyReading,
+    description: t.events.dailyReadingDesc,
+    frequency: t.events.daily,
+    icon: '🌙',
+    color: 'from-kosovo-blue to-kosovo-blue-dark',
+    schedule: lang === 'de' ? 'Jeden Abend nach Isha' : lang === 'sq' ? 'Çdo mbrëmje pas Jacisë' : 'كل مساء بعد العشاء',
+  },
+];
+---
+
+<section id="events" class="py-20 md:py-32 bg-white relative overflow-hidden">
+  <!-- Decorative -->
+  <div class="absolute bottom-0 right-0 w-96 h-96 bg-kosovo-blue/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <span class="inline-block px-4 py-2 bg-kosovo-blue/10 text-kosovo-blue text-sm font-semibold rounded-full mb-4">
+        📅 {t.events.subtitle}
+      </span>
+      <h2 class="section-title">{t.events.title}</h2>
+    </div>
+
+    <!-- Events Grid -->
+    <div class="grid md:grid-cols-3 gap-8">
+      {events.map((event, index) => (
+        <div class="card group hover:shadow-2xl border border-gray-100" style={`animation-delay: ${index * 0.1}s`}>
+          <!-- Icon Header -->
+          <div class={`bg-gradient-to-r ${event.color} w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
+            {event.icon}
+          </div>
+
+          <!-- Content -->
+          <h3 class="text-xl font-bold text-gray-800 mb-3">{event.title}</h3>
+          <p class="text-gray-600 mb-6 leading-relaxed">{event.description}</p>
+
+          <!-- Schedule Info -->
+          <div class="border-t pt-4 mt-auto">
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center px-3 py-1 bg-kosovo-gold/10 text-kosovo-gold-dark text-sm font-medium rounded-full">
+                {event.frequency}
+              </span>
+              <span class="text-sm text-gray-500">{event.schedule}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-16">
+      <div class="inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-kosovo-blue/5 to-kosovo-gold/5 rounded-2xl border border-kosovo-blue/10">
+        <svg class="w-6 h-6 text-kosovo-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span class="text-gray-700">
+          {lang === 'de' ? 'Alle sind herzlich willkommen!' : lang === 'sq' ? 'Të gjithë janë të mirëseardhur!' : 'الجميع مرحب بهم!'}
+        </span>
+      </div>
+    </div>
+  </div>
+</section>

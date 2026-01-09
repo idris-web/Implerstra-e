@@ -1,0 +1,100 @@
+---
+import { translations } from '../i18n/translations';
+
+interface Props {
+  lang: keyof typeof translations;
+}
+
+const { lang } = Astro.props;
+const t = translations[lang];
+
+// Placeholder bank details - to be filled in
+const bankDetails = {
+  accountHolder: 'Kosova e.V.',
+  iban: 'DE00 0000 0000 0000 0000 00',
+  bic: 'XXXXXXXX',
+  bank: 'Musterbank München',
+};
+---
+
+<section id="donate" class="py-20 md:py-32 relative overflow-hidden">
+  <!-- Background -->
+  <div class="absolute inset-0 gradient-bg"></div>
+  <div class="absolute inset-0 islamic-pattern opacity-10"></div>
+
+  <!-- Decorative -->
+  <div class="absolute top-20 right-20 w-64 h-64 bg-kosovo-gold/20 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-20 left-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Section Header -->
+    <div class="text-center mb-12">
+      <span class="inline-block px-4 py-2 bg-white/10 text-kosovo-gold text-sm font-semibold rounded-full mb-4">
+        ❤️ {t.donate.subtitle}
+      </span>
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{t.donate.title}</h2>
+      <p class="text-lg text-white/80 max-w-2xl mx-auto">
+        {t.donate.description}
+      </p>
+    </div>
+
+    <!-- Bank Details Card -->
+    <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-14 h-14 bg-kosovo-gold/10 rounded-2xl flex items-center justify-center">
+          <svg class="w-8 h-8 text-kosovo-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-800">{t.donate.bankDetails}</h3>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Account Holder -->
+        <div class="p-4 bg-gray-50 rounded-xl">
+          <span class="text-sm text-gray-500 block mb-1">{t.donate.accountHolder}</span>
+          <span class="text-lg font-semibold text-gray-800">{bankDetails.accountHolder}</span>
+        </div>
+
+        <!-- Bank -->
+        <div class="p-4 bg-gray-50 rounded-xl">
+          <span class="text-sm text-gray-500 block mb-1">{t.donate.bank}</span>
+          <span class="text-lg font-semibold text-gray-800">{bankDetails.bank}</span>
+        </div>
+
+        <!-- IBAN -->
+        <div class="p-4 bg-gray-50 rounded-xl md:col-span-2">
+          <span class="text-sm text-gray-500 block mb-1">{t.donate.iban}</span>
+          <span class="text-xl font-mono font-bold text-kosovo-blue tracking-wider">{bankDetails.iban}</span>
+        </div>
+
+        <!-- BIC -->
+        <div class="p-4 bg-gray-50 rounded-xl">
+          <span class="text-sm text-gray-500 block mb-1">{t.donate.bic}</span>
+          <span class="text-lg font-mono font-semibold text-gray-800">{bankDetails.bic}</span>
+        </div>
+
+        <!-- Reference -->
+        <div class="p-4 bg-kosovo-gold/10 rounded-xl border-2 border-kosovo-gold/20">
+          <span class="text-sm text-gray-500 block mb-1">{t.donate.reference}</span>
+          <span class="text-lg font-semibold text-kosovo-gold-dark">{t.donate.referenceText}</span>
+        </div>
+      </div>
+
+      <!-- Tax Note -->
+      <div class="mt-8 p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3">
+        <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span class="text-green-800">{t.donate.taxDeductible}</span>
+      </div>
+    </div>
+
+    <!-- Additional donation options -->
+    <div class="text-center mt-12">
+      <p class="text-white/60 text-sm">
+        {lang === 'de' ? 'Oder spenden Sie direkt in der Moschee' : lang === 'sq' ? 'Ose dhuroni drejtpërdrejt në xhami' : 'أو تبرع مباشرة في المسجد'}
+      </p>
+    </div>
+  </div>
+</section>

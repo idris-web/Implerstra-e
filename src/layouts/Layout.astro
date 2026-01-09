@@ -1,0 +1,42 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang?: 'de' | 'sq' | 'ar';
+}
+
+const {
+  title,
+  description = 'Kosova e.V. - Albanische Moschee München. Ein Ort des Glaubens, der Gemeinschaft und der Bildung seit 2014.',
+  lang = 'de'
+} = Astro.props;
+
+const isRTL = lang === 'ar';
+---
+
+<!doctype html>
+<html lang={lang} dir={isRTL ? 'rtl' : 'ltr'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Moschee, München, Albanisch, Kosovo, Islam, Kosova e.V., Gebetszeiten, Koranunterricht" />
+    <meta name="author" content="Kosova e.V." />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'de' ? 'de_DE' : lang === 'sq' ? 'sq_AL' : 'ar_SA'} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <title>{title}</title>
+  </head>
+  <body class={`bg-gray-50 ${isRTL ? 'font-arabic' : 'font-sans'}`}>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,34 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Hero from '../../components/Hero.astro';
+import About from '../../components/About.astro';
+import PrayerTimes from '../../components/PrayerTimes.astro';
+import Events from '../../components/Events.astro';
+import Gallery from '../../components/Gallery.astro';
+import Donate from '../../components/Donate.astro';
+import Contact from '../../components/Contact.astro';
+import Team from '../../components/Team.astro';
+import Footer from '../../components/Footer.astro';
+
+const lang = 'ar';
+---
+
+<Layout
+  title="كوسوفا - المسجد الألباني في ميونخ"
+  description="كوسوفا - المسجد الألباني في ميونخ. مكان للإيمان والمجتمع والتعليم منذ عام 2014."
+  lang={lang}
+>
+  <Navigation lang={lang} />
+  <main>
+    <Hero lang={lang} />
+    <About lang={lang} />
+    <PrayerTimes lang={lang} />
+    <Events lang={lang} />
+    <Gallery lang={lang} />
+    <Team lang={lang} />
+    <Donate lang={lang} />
+    <Contact lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

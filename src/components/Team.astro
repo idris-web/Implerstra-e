@@ -1,0 +1,82 @@
+---
+import { translations } from '../i18n/translations';
+
+interface Props {
+  lang: keyof typeof translations;
+}
+
+const { lang } = Astro.props;
+const t = translations[lang];
+
+// Team members placeholder
+const teamMembers = [
+  {
+    name: 'Name Nachname',
+    role: t.team.chairman,
+    image: null,
+  },
+  {
+    name: 'Name Nachname',
+    role: t.team.viceChairman,
+    image: null,
+  },
+  {
+    name: 'Name Nachname',
+    role: t.team.treasurer,
+    image: null,
+  },
+  {
+    name: 'Name Nachname',
+    role: t.team.secretary,
+    image: null,
+  },
+];
+---
+
+<section id="team" class="py-20 md:py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+  <!-- Decorative -->
+  <div class="absolute top-0 right-0 w-96 h-96 bg-kosovo-gold/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <span class="inline-block px-4 py-2 bg-kosovo-blue/10 text-kosovo-blue text-sm font-semibold rounded-full mb-4">
+        👥 {t.team.subtitle}
+      </span>
+      <h2 class="section-title">{t.team.title}</h2>
+    </div>
+
+    <!-- Team Grid -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {teamMembers.map((member, index) => (
+        <div class="group" style={`animation-delay: ${index * 0.1}s`}>
+          <div class="card text-center hover:bg-gradient-to-br hover:from-kosovo-blue hover:to-kosovo-blue-dark transition-all duration-300">
+            <!-- Avatar Placeholder -->
+            <div class="w-28 h-28 mx-auto mb-6 rounded-full overflow-hidden bg-gradient-to-br from-kosovo-blue/20 to-kosovo-gold/20 group-hover:from-white/20 group-hover:to-white/10 border-4 border-white shadow-xl">
+              <div class="w-full h-full flex items-center justify-center">
+                <svg class="w-14 h-14 text-kosovo-blue/40 group-hover:text-white/60" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Name -->
+            <h3 class="text-xl font-bold text-gray-800 group-hover:text-white mb-2 transition-colors">
+              {member.name}
+            </h3>
+
+            <!-- Role -->
+            <span class="inline-block px-4 py-1.5 bg-kosovo-gold/10 group-hover:bg-white/20 text-kosovo-gold-dark group-hover:text-kosovo-gold text-sm font-medium rounded-full transition-colors">
+              {member.role}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Note -->
+    <p class="text-center text-gray-500 text-sm mt-12 italic">
+      {lang === 'de' ? '* Namen und Fotos werden bald hinzugefügt' : lang === 'sq' ? '* Emrat dhe fotografitë do të shtohen së shpejti' : '* ستضاف الأسماء والصور قريباً'}
+    </p>
+  </div>
+</section>
